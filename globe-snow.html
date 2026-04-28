@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>❄️ Digital Snow Globe</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(100, 200, 255, 0.7);
+            letter-spacing: 3px;
+            color: #aaddff;
+        }
+
+        .subtitle {
+            color: #88aacc;
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .globe-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            margin: 20px;
+        }
+
+        #snowCanvas {
+            border-radius: 50%;
+            box-shadow:
+                0 0 60px rgba(100, 200, 255, 0.4),
+                inset 0 0 80px rgba(255, 255, 255, 0.1);
+            cursor: grab;
+            transition: box-shadow 0.3s ease;
+        }
+
+        #snowCanvas:active {
+            cursor: grabbing;
+            box-shadow:
+                0 0 80px rgba(100, 200, 255, 0.6),
+                inset 0 0 100px rgba(255, 255, 255, 0.15);
+        }
+
+        .globe-base {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 60px;
+            background: linear-gradient(180deg, #4a4a6a 0%, #2a2a3a 100%);
+            border-radius: 50%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .globe-stand {
+            position: absolute;
+            bottom: -80px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 180px;
+            height: 80px;
+            background: linear-gradient(180deg, #5a5a7a 0%, #3a3a4a 100%);
+            clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+        }
+
+        .info {
+            margin-top: 30px;
+            text-align: center;
+            max-width: 500px;
+            line-height: 1.6;
+            color: #88aacc;
+            font-size: 0.9rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #2a4a6a 0%, #1a2a3a 100%);
+            border: 2px solid #4a7a9a;
+            border-radius: 8px;
+            color: #aaddff;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #3a5a7a 0%, #2a3a4a 100%);
+            border-color: #6a9aba;
+            box-shadow: 0 0 20px rgba(100, 200, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .stats {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            color: #88aacc;
+            border: 1px solid rgba(100, 200, 255, 0.3);
+        }
+
+        .stats div {
+            margin: 5px 0;
+        }
+
+        .sparkle {
+            position: absolute;
+            pointer-events: none;
+            font-size: 20px;
+            animation: sparkle-fall 2s ease-out forwards;
+        }
+
+        @keyframes sparkle-fall {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(100px) scale(0.5);
+            }
+        }
+
+        .instructions {
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: #6688aa;
+        }
+    </style>
+</head>
+<body>
+    <h1>❄️ Digital Snow Globe</h1>
+    <p class="subtitle">A tiny interactive winter world</p>
+
+    <div class="globe-container">
+        <canvas id="snowCanvas" width="400" height="400"></canvas>
+        <div class="globe-base"></div>
+        <div class="globe-stand"></div>
+    </div>
+
+    <div class="info">
+        <p>Shake the globe to stir up the snow!<br>
+        Click inside to create sparkles. Watch the little snowman chill.</p>
+        <div class="instructions">
+            💡 Try shaking fast, or slowly dragging your mouse
+        </div>
+    </div>
+
+    <div class="action-buttons">
+        <button onclick="resetSnow()">🔄 Reset</button>
+        <button onclick="addMoreSnow()">❄️ More Snow</button>
+        <button onclick="toggleMusic()">🎵 Toggle Music</button>
+    </div>
+
+    <div class="stats">
+        <div>Snowflakes: <span id="flakeCount">0</span></div>
+        <div>Wind: <span id="windSpeed">0</span></div>
+        <div>Shake Intensity: <span id="shakeLevel">0</span>%</div>
+        <div>FPS: <span id="fps">60</span></div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('snowCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Physics and state
+        let snowflakes = [];
+        let wind = { x: 0, y: 0 };
+        let targetWind = { x: 0, y: 0 };
+        let shakeIntensity = 0;
+        let lastShakeTime = 0;
+        let isMouseDown = false;
+        let lastMousePos = { x: 0, y: 0 };
+        let mouseVelocity = { x: 0, y: 0 };
+        let fps = 60;
+        let lastTime = performance.now();
+        let frameCount = 0;
+
+        // Snowflake class
+        class Snowflake {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * -canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.speed = Math.random() * 1 + 0.5;
+                this.drift = Math.random() * 0.5 - 0.25;
+                this.opacity = Math.random() * 0.6 + 0.4;
+                this.oscillation = Math.random() * Math.PI * 2;
+                this.oscillationSpeed = Math.random() * 0.05 + 0.02;
+            }
+
+            update(deltaTime) {
+                // Apply wind
+                this.x += wind.x * deltaTime * 0.1 + this.drift;
+                this.y += this.speed * deltaTime * 0.06;
+
+                // Oscillate side to side
+                this.oscillation += this.oscillationSpeed * deltaTime * 0.06;
+                this.x += Math.sin(this.oscillation) * 0.3;
+
+                // Wrap around horizontally
+                if (this.x > canvas.width + 20) this.x = -20;
+                if (this.x < -20) this.x = canvas.width + 20;
+
+                // Reset when it goes off bottom
+                if (this.y > canvas.height + 20) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                ctx.fill();
+
+                // Add glow
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size * 2, 0, Math.PI * 2);
+                const gradient = ctx.createRadialGradient(
+                    this.x, this.y, 0,
+                    this.x, this.y, this.size * 2
+                );
+                gradient.addColorStop(0, `rgba(200, 230, 255, ${this.opacity * 0.3})`);
+                gradient.addColorStop(1, 'rgba(200, 230, 255, 0)');
+                ctx.fillStyle = gradient;
+                ctx.fill();
+            }
+        }
+
+        // Snowman (simple pixel art style)
+        function drawSnowman() {
+            const centerX = canvas.width / 2;
+            const baseY = canvas.height - 60;
+
+            // Body
+            ctx.fillStyle = '#ffffff';
+            ctx.strokeStyle = '#aaaaaa';
+            ctx.lineWidth = 2;
+
+            // Bottom ball
+            ctx.beginPath();
+            ctx.arc(centerX, baseY, 35, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+
+            // Middle ball
+            ctx.beginPath();
+            ctx.arc(centerX, baseY - 45, 28, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+
+            // Head
+            ctx.beginPath();
+            ctx.arc(centerX, baseY - 85, 22, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+
+            // Eyes
+            ctx.fillStyle = '#333333';
+            ctx.beginPath();
+            ctx.arc(centerX - 8, baseY - 90, 3, 0, Math.PI * 2);
+            ctx.arc(centerX + 8, baseY - 90, 3, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Nose (carrot)
+            ctx.fillStyle = '#ff6600';
+            ctx.beginPath();
+            ctx.moveTo(centerX, baseY - 85);
+            ctx.lineTo(centerX + 15, baseY - 82);
+            ctx.lineTo(centerX, baseY - 79);
+            ctx.closePath();
+            ctx.fill();
+
+            // Buttons
+            ctx.fillStyle = '#333333';
+            for (let i = 0; i < 3; i++) {
+                ctx.beginPath();
+                ctx.arc(centerX, baseY - 55 + i * 12, 2.5, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // Hat
+            ctx.fillStyle = '#222222';
+            ctx.fillRect(centerX - 25, baseY - 130, 50, 8);
+            ctx.fillRect(centerX - 15, baseY - 150, 30, 20);
+            ctx.fillRect(centerX - 18, baseY - 145, 36, 3);
+
+            // Scarf
+            ctx.fillStyle = '#cc0000';
+            ctx.fillRect(centerX - 20, baseY - 70, 40, 8);
+            ctx.fillRect(centerX + 12, baseY - 70, 8, 25);
+        }
+
+        // Trees in background
+        function drawTrees() {
+            const treePositions = [50, 150, 280, 350];
+            treePositions.forEach((x, index) => {
+                const y = canvas.height - 60;
+                const scale = 0.6 + Math.random() * 0.4;
+
+                // Trunk
+                ctx.fillStyle = '#5c4033';
+                ctx.fillRect(x - 8 * scale, y - 40 * scale, 16 * scale, 40 * scale);
+
+                // Foliage (3 triangles stacked)
+                ctx.fillStyle = '#1a4d1a';
+                for (let i = 0; i < 3; i++) {
+                    ctx.beginPath();
+                    const triangleY = y - 40 * scale - i * 30 * scale;
+                    ctx.moveTo(x - 35 * scale + i * 10 * scale, triangleY);
+                    ctx.lineTo(x + 35 * scale - i * 10 * scale, triangleY);
+                    ctx.lineTo(x, triangleY - 35 * scale);
+                    ctx.closePath();
+                    ctx.fill();
+                }
+
+                // Snow on trees
+                ctx.fillStyle = '#ffffff';
+                for (let i = 0; i < 3; i++) {
+                    const triangleY = y - 40 * scale - i * 30 * scale;
+                    ctx.beginPath();
+                    ctx.moveTo(x - 30 * scale + i * 8 * scale, triangleY + 5);
+                    ctx.lineTo(x + 30 * scale - i * 8 * scale, triangleY + 5);
+                    ctx.lineTo(x, triangleY - 25 * scale);
+                    ctx.closePath();
+                    ctx.fill();
+                }
+            });
+        }
+
+        // Initialize snowflakes
+        function initSnow(count = 150) {
+            snowflakes = [];
+            for (let i = 0; i < count; i++) {
+                snowflakes.push(new Snowflake());
+            }
+        }
+
+        // Draw ground snow
+        function drawGround() {
+            const gradient = ctx.createLinearGradient(0, canvas.height - 40, 0, canvas.height);
+            gradient.addColorStop(0, 'rgba(255, 255, 255, 0.9)');
+            gradient.addColorStop(1, 'rgba(200, 230, 255, 0.7)');
+
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.moveTo(0, canvas.height - 20);
+            // Wavy snow surface
+            for (let x = 0; x <= canvas.width; x += 20) {
+                const y = canvas.height - 30 + Math.sin(x * 0.05 + Date.now() * 0.001) * 5;
+                ctx.lineTo(x, y);
+            }
+            ctx.lineTo(canvas.width, canvas.height);
+            ctx.lineTo(0, canvas.height);
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        // Mouse/touch handlers for shaking
+        canvas.addEventListener('mousedown', startDrag);
+        canvas.addEventListener('mousemove', drag);
+        canvas.addEventListener('mouseup', endDrag);
+        canvas.addEventListener('mouseleave', endDrag);
+
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            startDrag({ clientX: touch.clientX, clientY: touch.clientY });
+        });
+
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            drag({ clientX: touch.clientX, clientY: touch.clientY });
+        });
+
+        canvas.addEventListener('touchend', endDrag);
+
+        function startDrag(e) {
+            isMouseDown = true;
+            const rect = canvas.getBoundingClientRect();
+            lastMousePos = {
+                x: e.clientX - rect.left,
+                y: e.clientY - rect.top
+            };
+            createSparkle(e.clientX, e.clientY, true);
+        }
+
+        function drag(e) {
+            if (!isMouseDown) return;
+
+            const rect = canvas.getBoundingClientRect();
+            const currentPos = {
+                x: e.clientX - rect.left,
+                y: e.clientY - rect.top
+            };
+
+            mouseVelocity = {
+                x: currentPos.x - lastMousePos.x,
+                y: currentPos.y - lastMousePos.y
+            };
+
+            lastMousePos = currentPos;
+
+            // Accumulate shake
+            const speed = Math.sqrt(mouseVelocity.x ** 2 + mouseVelocity.y ** 2);
+            shakeIntensity = Math.min(shakeIntensity + speed * 0.5, 100);
+
+            // Create sparkles while dragging fast
+            if (speed > 10) {
+                createSparkle(e.clientX, e.clientY, false);
+            }
+        }
+
+        function endDrag() {
+            isMouseDown = false;
+        }
+
+        function createSparkle(clientX, clientY, isClick) {
+            const rect = canvas.getBoundingClientRect();
+            const x = clientX - rect.left;
+            const y = clientY - rect.top;
+
+            // Visual sparkle
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.textContent = isClick ? '✨' : '❄️';
+            sparkle.style.left = clientX + 'px';
+            sparkle.style.top = clientY + 'px';
+            document.body.appendChild(sparkle);
+
+            setTimeout(() => sparkle.remove(), 2000);
+
+            // Add some snow particles if click
+            if (isClick) {
+                for (let i = 0; i < 10; i++) {
+                    const flake = new Snowflake();
+                    flake.x = x;
+                    flake.y = y;
+                    flake.speed *= 2;
+                    snowflakes.push(flake);
+                }
+            }
+        }
+
+        // Physics update
+        function updatePhysics(deltaTime) {
+            // Decay shake intensity
+            shakeIntensity *= 0.92;
+
+            // Calculate wind from mouse velocity
+            if (isMouseDown) {
+                targetWind.x = mouseVelocity.x * 0.1;
+                targetWind.y = -Math.abs(mouseVelocity.y) * 0.05 + (Math.random() - 0.5) * 2;
+            } else {
+                targetWind.x *= 0.95;
+                targetWind.y *= 0.95;
+            }
+
+            // Smooth wind transition
+            wind.x += (targetWind.x - wind.x) * 0.1;
+            wind.y += (targetWind.y - wind.y) * 0.1;
+
+            // Add some random turbulence
+            if (shakeIntensity > 20) {
+                wind.x += (Math.random() - 0.5) * shakeIntensity * 0.1;
+                wind.y += (Math.random() - 0.5) * shakeIntensity * 0.05;
+            }
+
+            // Update all snowflakes
+            snowflakes.forEach(flake => flake.update(deltaTime));
+
+            // Remove excess snowflakes (performance)
+            if (snowflakes.length > 300) {
+                snowflakes.splice(0, snowflakes.length - 300);
+            }
+
+            // Update stats
+            document.getElementById('flakeCount').textContent = snowflakes.length;
+            document.getElementById('windSpeed').textContent = Math.round(Math.sqrt(wind.x**2 + wind.y**2) * 10) / 10;
+            document.getElementById('shakeLevel').textContent = Math.round(shakeIntensity);
+        }
+
+        // Rendering
+        function render() {
+            // Clear with gradient background
+            const gradient = ctx.createRadialGradient(
+                canvas.width / 2, canvas.height / 2, 0,
+                canvas.width / 2, canvas.height / 2, canvas.width / 2
+            );
+            gradient.addColorStop(0, '#1a2a3a');
+            gradient.addColorStop(1, '#0a1520');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw distant mountains
+            drawMountains();
+
+            // Draw trees
+            drawTrees();
+
+            // Draw ground
+            drawGround();
+
+            // Draw snowflakes
+            snowflakes.forEach(flake => flake.draw());
+
+            // Draw snowman
+            drawSnowman();
+
+            // Draw glow effect based on shake
+            if (shakeIntensity > 30) {
+                ctx.beginPath();
+                ctx.arc(canvas.width / 2, canvas.height / 2, 180, 0, Math.PI * 2);
+                const shakeGlow = ctx.createRadialGradient(
+                    canvas.width / 2, canvas.height / 2, 150,
+                    canvas.width / 2, canvas.height / 2, 210
+                );
+                shakeGlow.addColorStop(0, 'rgba(100, 200, 255, 0)');
+                shakeGlow.addColorStop(1, `rgba(100, 200, 255, ${shakeIntensity * 0.003})`);
+                ctx.fillStyle = shakeGlow;
+                ctx.fill();
+            }
+        }
+
+        function drawMountains() {
+            // Background mountains
+            ctx.fillStyle = '#0f2029';
+            ctx.beginPath();
+            ctx.moveTo(0, canvas.height);
+            ctx.lineTo(0, canvas.height - 80);
+            ctx.lineTo(80, canvas.height - 120);
+            ctx.lineTo(140, canvas.height - 90);
+            ctx.lineTo(220, canvas.height - 140);
+            ctx.lineTo(300, canvas.height - 100);
+            ctx.lineTo(380, canvas.height - 130);
+            ctx.lineTo(canvas.width, canvas.height - 90);
+            ctx.lineTo(canvas.width, canvas.height);
+            ctx.closePath();
+            ctx.fill();
+
+            // Snow caps
+            ctx.fillStyle = '#ddeeff';
+            ctx.beginPath();
+            ctx.moveTo(220, canvas.height - 140);
+            ctx.lineTo(240, canvas.height - 150);
+            ctx.lineTo(260, canvas.height - 140);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.moveTo(300, canvas.height - 100);
+            ctx.lineTo(320, canvas.height - 115);
+            ctx.lineTo(340, canvas.height - 100);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.moveTo(380, canvas.height - 130);
+            ctx.lineTo(400, canvas.height - 145);
+            ctx.lineTo(420, canvas.height - 130);
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        // Main animation loop
+        function animate(currentTime) {
+            const deltaTime = Math.min(currentTime - lastTime, 50); // Cap delta to avoid huge jumps
+            lastTime = currentTime;
+
+            frameCount++;
+            if (frameCount % 30 === 0) {
+                fps = Math.round(1000 / deltaTime);
+                document.getElementById('fps').textContent = fps;
+            }
+
+            updatePhysics(deltaTime);
+            render();
+
+            requestAnimationFrame(animate);
+        }
+
+        // Control functions
+        function resetSnow() {
+            initSnow(150);
+            shakeIntensity = 0;
+            wind.x = 0;
+            wind.y = 0;
+            targetWind.x = 0;
+            targetWind.y = 0;
+        }
+
+        function addMoreSnow() {
+            for (let i = 0; i < 50; i++) {
+                const flake = new Snowflake();
+                flake.y = Math.random() * -100;
+                snowflakes.push(flake);
+            }
+        }
+
+        let musicEnabled = false;
+        let audioContext = null;
+        let oscillator = null;
+
+        function toggleMusic() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+
+            if (musicEnabled) {
+                if (oscillator) {
+                    oscillator.stop();
+                    oscillator = null;
+                }
+                musicEnabled = false;
+            } else {
+                // Create a simple ambient drone
+                oscillator = audioContext.createOscillator();
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(220, audioContext.currentTime);
+
+                const gainNode = audioContext.createGain();
+                gainNode.gain.setValueAtTime(0.05, audioContext.currentTime);
+
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                oscillator.start();
+
+                musicEnabled = true;
+            }
+        }
+
+        // Initialize
+        initSnow(150);
+        requestAnimationFrame(animate);
+
+        // Console welcome message
+        console.log('%c❄️ Digital Snow Globe ❄️', 'color: #aaddff; font-size: 20px; font-weight: bold;');
+        console.log('%cShake your device to stir up the snow!', 'color: #88aacc; font-size: 14px;');
+    </script>
+</body>
+</html>
