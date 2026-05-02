@@ -2,6 +2,7 @@
 
 ## Build History
 
+- **2026-05-02**: Created "Neon Snake" — classic arcade snake game with neon glow, gradient tail, score tracking, high score persistence, mobile controls, increasing speed with progression. Pushed to GitHub: https://github.com/Kiloooai/neon-snake
 - **2026-05-02**: Created "Neon Pulse" — rhythmic visualizer with pulsing neon orbs, expanding rings, beat indicator, drag-to-adjust tempo, multiple time signatures (4/4, 3/4, 5/4, 7/4), visual modes (rings/waves/orbits). Interactive rhythm toy. Pushed to GitHub: https://github.com/Kiloooai/neon-pulse
 - **2026-05-02**: Created "Neon Ripples" — interactive ripple tank simulation with expanding rings, adjustable damping/wave-speed/radius/line-width, multiple color schemes (cyan/magenta/gold/rainbow/matrix), auto mode, and click-to-create waves. Pushed to GitHub: https://github.com/Kiloooai/neon-ripples
 - **2026-05-02**: Created "Neon Lava Lamp" — interactive blobs simulation with rising wobbling blobs, glow effects, click to add, adjustable count/speed/size/wobble, multiple color schemes (classic/cyber/rainbow/matrix/sunset). Pushed to GitHub: https://github.com/Kiloooai/neon-lava-lamp
@@ -52,4 +53,5 @@ Type 3 browser toys (public repos):
 17. bouncing-dvd
 18. neon-lava-lamp
 19. neon-ripples
-20. neon-pulse ← latest
+20. neon-pulse
+21. neon-snake ← latest
