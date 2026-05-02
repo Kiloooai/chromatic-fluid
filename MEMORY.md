@@ -2,6 +2,8 @@
 
 ## Build History
 
+- **2026-05-02**: Created "Neon Elastic Web" — interactive elastic mesh network with glowing nodes and spring edges, drag nodes to stretch, bounce and snap back, stress glow under tension, multiple color modes (cyan/magenta/green/rainbow/stress), adjustable physics parameters. Pushed to GitHub: https://github.com/Kiloooai/neon-elastic-web
+- **2026-05-02**: Created "Neon Spiral Painter" — interactive mandala drawing toy with rotating spiral arms, adjustable arms/rotation/tightness/line-width/color-cycle/fade, symmetry modes (radial/mirror/kaleidoscope), meditative creative tool. Pushed to GitHub: https://github.com/Kiloooai/neon-spiral-painter
 - **2026-05-02**: Created "Neon Tron" — light cycle survival game with permanent glowing trail, energy orb collection, increasing speed, classic Tron aesthetic. Pushed to GitHub: https://github.com/Kiloooai/neon-tron
 - **2026-05-02**: Created "Neon Simon" — memory sequence game with four glowing neon pads, increasing pattern length, keyboard (Q/W/A/S) and touch input, score and high score persistence. Pushed to GitHub: https://github.com/Kiloooai/neon-simon
 - **2026-05-02**: Created "Neon Garden" — interactive flower planting simulation with glowing neon stems/buds, growth animation, swaying in wind, falling petals, five color palettes (cyber/sunset/forest/ocean/rainbow), adjustable growth speed/wind/petal fall. Pushed to GitHub: https://github.com/Kiloooai/neon-garden
@@ -66,4 +68,6 @@ Type 3 browser toys (public repos):
 24. neon-fireflies
 25. neon-garden
 26. neon-simon
-27. neon-tron ← latest
+27. neon-tron
+28. neon-spiral-painter
+29. neon-elastic-web ← latest
