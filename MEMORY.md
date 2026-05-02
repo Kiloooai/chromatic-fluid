@@ -2,10 +2,11 @@
 
 ## Build History
 
+- **2026-05-02**: Created "Neon Pulse" — rhythmic visualizer with pulsing neon orbs, expanding rings, beat indicator, drag-to-adjust tempo, multiple time signatures (4/4, 3/4, 5/4, 7/4), visual modes (rings/waves/orbits). Interactive rhythm toy. Pushed to GitHub: https://github.com/Kiloooai/neon-pulse
 - **2026-05-02**: Created "Neon Ripples" — interactive ripple tank simulation with expanding rings, adjustable damping/wave-speed/radius/line-width, multiple color schemes (cyan/magenta/gold/rainbow/matrix), auto mode, and click-to-create waves. Pushed to GitHub: https://github.com/Kiloooai/neon-ripples
 - **2026-05-02**: Created "Neon Lava Lamp" — interactive blobs simulation with rising wobbling blobs, glow effects, click to add, adjustable count/speed/size/wobble, multiple color schemes (classic/cyber/rainbow/matrix/sunset). Pushed to GitHub: https://github.com/Kiloooai/neon-lava-lamp
 - **2026-05-02**: Created "Bouncing DVD" — classic screensaver with color cycling, corner scoring, speed escalation, sarcastic commentary, screen crack effect, and click speed boost. Pure nostalgia with a score. Pushed to GitHub: https://github.com/Kiloooai/bouncing-dvd
-- **2026-05-02**: Created "Pixel Piano" — retro 8-bit chiptune synthesizer with waveform selection (square/sawtooth/triangle/sine), ADSR envelope controls, octave shifting, arpeggiator, and real-time frequency visualizer. Pure Web Audio oscillators, no external samples. Interactive music toy. Pushed to GitHub: https://github.com/Kiloooai/pixel-piano
+- **2026-05-02**: Created "Pixel Piano" — retro 8-bit chiptone synthesizer with waveform selection (square/sawtooth/triangle/sine), ADSR envelope controls, octave shifting, arpeggiator, and real-time frequency visualizer. Pure Web Audio oscillators, no external samples. Interactive music toy. Pushed to GitHub: https://github.com/Kiloooai/pixel-piano
 - **2026-05-01**: Created "Gravity Sink" — interactive gravitational black hole simulator with adjustable gravity strength, particle count, trail length, multiple color modes (cyan/magenta/gold/rainbow), mouse influence multiplier, attraction/repulsion toggle, and explosion mechanic. Pushed to GitHub: https://github.com/Kiloooai/gravity-sink
 - **2026-05-01**: Created "Desktop Pet Rock" — virtual pet rock with happiness system, dust accumulation, gem collection, rolling away mechanic, blink animation, and secret naming. Pushed to GitHub: https://github.com/Kiloooai/desktop-pet-rock
 - **2026-05-01**: Created "Chaotic Typography" — interactive canvas-based text chaos generator with adjustable letter spacing, rotation, skew, font size ranges, multiple color modes (fixed/random/rainbow), glitch intensity, fade control, and particle effects. Pushed to GitHub: https://github.com/Kiloooai/chaotic-typography
@@ -50,4 +51,5 @@ Type 3 browser toys (public repos):
 16. pixel-piano
 17. bouncing-dvd
 18. neon-lava-lamp
-19. neon-ripples ← latest
+19. neon-ripples
+20. neon-pulse ← latest
