@@ -2,6 +2,7 @@
 
 ## Build History
 
+- **2026-05-02**: Created "Neon Tron" — light cycle survival game with permanent glowing trail, energy orb collection, increasing speed, classic Tron aesthetic. Pushed to GitHub: https://github.com/Kiloooai/neon-tron
 - **2026-05-02**: Created "Neon Simon" — memory sequence game with four glowing neon pads, increasing pattern length, keyboard (Q/W/A/S) and touch input, score and high score persistence. Pushed to GitHub: https://github.com/Kiloooai/neon-simon
 - **2026-05-02**: Created "Neon Garden" — interactive flower planting simulation with glowing neon stems/buds, growth animation, swaying in wind, falling petals, five color palettes (cyber/sunset/forest/ocean/rainbow), adjustable growth speed/wind/petal fall. Pushed to GitHub: https://github.com/Kiloooai/neon-garden
 - **2026-05-02**: Created "Neon Fireflies" — interactive simulation of glowing fireflies with trails, mouse attraction, burst on click, adjustable count/speed/glow/trail, multiple color palettes (mixed/blue/green/gold/rainbow). Pushed to GitHub: https://github.com/Kiloooai/neon-fireflies
@@ -64,4 +65,5 @@ Type 3 browser toys (public repos):
 23. neon-cells
 24. neon-fireflies
 25. neon-garden
-26. neon-simon ← latest
+26. neon-simon
+27. neon-tron ← latest
