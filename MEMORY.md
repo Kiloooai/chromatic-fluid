@@ -2,6 +2,7 @@
 
 ## Build History
 
+- **2026-05-02**: Created "Bouncing DVD" — classic screensaver with color cycling, corner scoring, speed escalation, sarcastic commentary, screen crack effect, and click speed boost. Pure nostalgia with a score. Pushed to GitHub: https://github.com/Kiloooai/bouncing-dvd
 - **2026-05-02**: Created "Pixel Piano" — retro 8-bit chiptune synthesizer with waveform selection (square/sawtooth/triangle/sine), ADSR envelope controls, octave shifting, arpeggiator, and real-time frequency visualizer. Pure Web Audio oscillators, no external samples. Interactive music toy. Pushed to GitHub: https://github.com/Kiloooai/pixel-piano
 - **2026-05-01**: Created "Gravity Sink" — interactive gravitational black hole simulator with adjustable gravity strength, particle count, trail length, multiple color modes (cyan/magenta/gold/rainbow), mouse influence multiplier, attraction/repulsion toggle, and explosion mechanic. Pushed to GitHub: https://github.com/Kiloooai/gravity-sink
 - **2026-05-01**: Created "Desktop Pet Rock" — virtual pet rock with happiness system, dust accumulation, gem collection, rolling away mechanic, blink animation, and secret naming. Pushed to GitHub: https://github.com/Kiloooai/desktop-pet-rock
@@ -44,4 +45,5 @@ Type 3 browser toys (public repos):
 13. chaotic-typography
 14. desktop-pet-rock
 15. gravity-sink
-16. pixel-piano ← latest
+16. pixel-piano
+17. bouncing-dvd ← latest
