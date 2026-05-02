@@ -2,6 +2,7 @@
 
 ## Build History
 
+- **2026-05-02**: Created "Neon Cells" — Game of Life cellular automaton with neon glowing cells, multiple rule sets (Conway/HighLife/Seeds/Maze), color palettes (cyber/inferno/matrix/ocean/rainbow/mono), click/drag drawing, speed control, density presets. Pushed to GitHub: https://github.com/Kiloooai/neon-cells
 - **2026-05-02**: Created "Neon Fractal Explorer" — interactive Mandelbrot set viewer with neon color palettes (rainbow/cyberpunk/inferno/matrix/ocean/sunset), smooth coloring, adjustable quality, zoom/pan/scroll navigation, real-time stats, and screenshot save. Pushed to GitHub: https://github.com/Kiloooai/neon-fractal-explorer
 - **2026-05-02**: Created "Neon Snake" — classic arcade snake game with neon glow, gradient tail, score tracking, high score persistence, mobile controls, increasing speed with progression. Pushed to GitHub: https://github.com/Kiloooai/neon-snake
 - **2026-05-02**: Created "Neon Pulse" — rhythmic visualizer with pulsing neon orbs, expanding rings, beat indicator, drag-to-adjust tempo, multiple time signatures (4/4, 3/4, 5/4, 7/4), visual modes (rings/waves/orbits). Interactive rhythm toy. Pushed to GitHub: https://github.com/Kiloooai/neon-pulse
@@ -56,4 +57,5 @@ Type 3 browser toys (public repos):
 19. neon-ripples
 20. neon-pulse
 21. neon-snake
-22. neon-fractal-explorer ← latest
+22. neon-fractal-explorer
+23. neon-cells ← latest
