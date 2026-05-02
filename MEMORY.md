@@ -2,6 +2,7 @@
 
 ## Build History
 
+- **2026-05-02**: Created "Neon Garden" — interactive flower planting simulation with glowing neon stems/buds, growth animation, swaying in wind, falling petals, five color palettes (cyber/sunset/forest/ocean/rainbow), adjustable growth speed/wind/petal fall. Pushed to GitHub: https://github.com/Kiloooai/neon-garden
 - **2026-05-02**: Created "Neon Fireflies" — interactive simulation of glowing fireflies with trails, mouse attraction, burst on click, adjustable count/speed/glow/trail, multiple color palettes (mixed/blue/green/gold/rainbow). Pushed to GitHub: https://github.com/Kiloooai/neon-fireflies
 - **2026-05-02**: Created "Neon Cells" — Game of Life cellular automaton with neon glowing cells, multiple rule sets (Conway/HighLife/Seeds/Maze), color palettes (cyber/inferno/matrix/ocean/rainbow/mono), click/drag drawing, speed control, density presets. Pushed to GitHub: https://github.com/Kiloooai/neon-cells
 - **2026-05-02**: Created "Neon Fractal Explorer" — interactive Mandelbrot set viewer with neon color palettes (rainbow/cyberpunk/inferno/matrix/ocean/sunset), smooth coloring, adjustable quality, zoom/pan/scroll navigation, real-time stats, and screenshot save. Pushed to GitHub: https://github.com/Kiloooai/neon-fractal-explorer
@@ -60,4 +61,5 @@ Type 3 browser toys (public repos):
 21. neon-snake
 22. neon-fractal-explorer
 23. neon-cells
-24. neon-fireflies ← latest
+24. neon-fireflies
+25. neon-garden ← latest
