@@ -2,6 +2,7 @@
 
 ## Build History
 
+- **2026-05-02**: Created "Neon Ripples" — interactive ripple tank simulation with expanding rings, adjustable damping/wave-speed/radius/line-width, multiple color schemes (cyan/magenta/gold/rainbow/matrix), auto mode, and click-to-create waves. Pushed to GitHub: https://github.com/Kiloooai/neon-ripples
 - **2026-05-02**: Created "Neon Lava Lamp" — interactive blobs simulation with rising wobbling blobs, glow effects, click to add, adjustable count/speed/size/wobble, multiple color schemes (classic/cyber/rainbow/matrix/sunset). Pushed to GitHub: https://github.com/Kiloooai/neon-lava-lamp
 - **2026-05-02**: Created "Bouncing DVD" — classic screensaver with color cycling, corner scoring, speed escalation, sarcastic commentary, screen crack effect, and click speed boost. Pure nostalgia with a score. Pushed to GitHub: https://github.com/Kiloooai/bouncing-dvd
 - **2026-05-02**: Created "Pixel Piano" — retro 8-bit chiptune synthesizer with waveform selection (square/sawtooth/triangle/sine), ADSR envelope controls, octave shifting, arpeggiator, and real-time frequency visualizer. Pure Web Audio oscillators, no external samples. Interactive music toy. Pushed to GitHub: https://github.com/Kiloooai/pixel-piano
@@ -48,4 +49,5 @@ Type 3 browser toys (public repos):
 15. gravity-sink
 16. pixel-piano
 17. bouncing-dvd
-18. neon-lava-lamp ← latest
+18. neon-lava-lamp
+19. neon-ripples ← latest
