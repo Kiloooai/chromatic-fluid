@@ -2,6 +2,7 @@
 
 ## Build History
 
+- **2026-05-02**: Created "Neon Particle Fountain" — interactive particle emitter with gravity, bounce, wind, adjustable burst count/speed/spread/lifetime/glow, color modes (rainbow/fire/ice/neon/matrix), drag-to-shoot continuous streams. Pushed to GitHub: https://github.com/Kiloooai/neon-particle-fountain
 - **2026-05-02**: Created "Neon Elastic Web" — interactive elastic mesh network with glowing nodes and spring edges, drag nodes to stretch, bounce and snap back, stress glow under tension, multiple color modes (cyan/magenta/green/rainbow/stress), adjustable physics parameters. Pushed to GitHub: https://github.com/Kiloooai/neon-elastic-web
 - **2026-05-02**: Created "Neon Spiral Painter" — interactive mandala drawing toy with rotating spiral arms, adjustable arms/rotation/tightness/line-width/color-cycle/fade, symmetry modes (radial/mirror/kaleidoscope), meditative creative tool. Pushed to GitHub: https://github.com/Kiloooai/neon-spiral-painter
 - **2026-05-02**: Created "Neon Tron" — light cycle survival game with permanent glowing trail, energy orb collection, increasing speed, classic Tron aesthetic. Pushed to GitHub: https://github.com/Kiloooai/neon-tron
@@ -70,4 +71,5 @@ Type 3 browser toys (public repos):
 26. neon-simon
 27. neon-tron
 28. neon-spiral-painter
-29. neon-elastic-web ← latest
+29. neon-elastic-web
+30. neon-particle-fountain ← latest
