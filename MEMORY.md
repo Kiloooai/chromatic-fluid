@@ -2,6 +2,7 @@
 
 ## Build History
 
+- **2026-05-03**: Created "Neon Harmonograph" — virtual pendulum drawing machine generating geometric Lissajous-like patterns; adjustable frequency/amplitude/phase/damping for X/Y pendulums; neon trails; trail fade control; speed; clear/random; meditative generative art. Pushed to GitHub: https://github.com/Kiloooai/neon-harmonograph
 - **2026-05-03**: Created "Neon Circuit Sandbox" — interactive logic circuit simulator with drag-and-drop gates (AND/OR/XOR/NOT), toggle switches, live voltage propagation, glowing wires indicating HIGH/LOW, right-click wire deletion, switch double-toggle, clear/reset controls. Pushed to GitHub: https://github.com/Kiloooai/neon-circuit-sandbox
 - **2026-05-02**: Created "Neon Audio Visualizer" — real-time microphone-driven audio visualizer with 4 modes (frequency bars, circular wave, starfield pulse, waveform), adjustable sensitivity/smoothing/bar-count/glow, multiple color schemes (rainbow/cyber/fire/ice/matrix/sunset), neon glow effects. Pushed to GitHub: https://github.com/Kiloooai/neon-audio-visualizer
 - **2026-05-02**: Created "Neon Particle Fountain" — interactive particle emitter with gravity, bounce, wind, adjustable burst count/speed/spread/lifetime/glow, multiple color modes (rainbow/fire/ice/neon/matrix), drag-to-shoot continuous streams. Pushed to GitHub: https://github.com/Kiloooai/neon-particle-fountain
@@ -76,4 +77,5 @@ Type 3 browser toys (public repos):
 29. neon-elastic-web
 30. neon-particle-fountain
 31. neon-audio-visualizer
-32. neon-circuit-sandbox ← latest
+32. neon-circuit-sandbox
+33. neon-harmonograph ← latest
