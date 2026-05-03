@@ -2,6 +2,7 @@
 
 ## Build History
 
+- **2026-05-03**: Created "Neon Slime Mold" — Physarum polycephalum simulation; agents with 3-sensor head follow trail, deposit pheromones, emergent vein networks; adjustable agent count/sensor angle/distance/turn speed/move speed/trail decay/color cycle; click to add agents. Pushed to GitHub: https://github.com/Kiloooai/neon-slime-mold
 - **2026-05-03**: Created "Neon Metaballs" — organic gooey blobs via CSS blur+contrast filter; multiple floating orbs merge and split; adjustable blob count/base radius/blur/contrast/speed/color cycle; click to add. Pushed to GitHub: https://github.com/Kiloooai/neon-metaballs
 - **2026-05-03**: Created "Neon Boids" — flocking simulation with separation/alignment/cohesion rules; neon trails; adjustable boid count/perception radius/rule weights/max speed/trail length; click to scatter. Pushed to GitHub: https://github.com/Kiloooai/neon-boids
 - **2026-05-03**: Created "Neon Dendrite" — diffusion-limited aggregation fractal growth; particles randomly walk until they touch cluster and stick, forming branching lightning-like structures; multiple seeds, neon glow; adjustable walker count/spawn rate/stickiness/step size/color speed; click to seed. Pushed to GitHub: https://github.com/Kiloooai/neon-dendrite
@@ -101,4 +102,5 @@ Type 3 browser toys (public repos):
 42. neon-double-pendulum
 43. neon-dendrite
 44. neon-boids
-45. neon-metaballs ← latest
+45. neon-metaballs
+46. neon-slime-mold ← latest
