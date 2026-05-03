@@ -2,6 +2,7 @@
 
 ## Build History
 
+- **2026-05-03**: Created "Neon Double Pendulum" — chaotic compound pendulum with two arms, sensitive to initial conditions; drag to set start angle, release to swing; neon trails; adjustable masses/lengths/gravity/friction/trail fade; energy readout. Pushed to GitHub: https://github.com/Kiloooai/neon-double-pendulum
 - **2026-05-03**: Created "Neon Pendulum Wave" — multiple pendulums of slightly different lengths swing together creating wave interference patterns, neon glow bobs and arms, trail fade, adjustable count/gravity/length spread/color cycle, click to pause/resume. Pushed to GitHub: https://github.com/Kiloooai/neon-pendulum-wave
 - **2026-05-03**: Created "Neon Flow Field" — emergent vector field visualizer with particles gliding through dynamically shifting flow; adjustable particle count/speed/noise scale/time evolution/trail fade/color cycling; click to add particles; neon direction-based coloring. Pushed to GitHub: https://github.com/Kiloooai/neon-flow-field
 - **2026-05-03**: Created "Neon Step Sequencer" — 16-step music sequencer with 4 synth tracks (sine/square/saw/triangle), click grid to toggle notes, play/stop loop, BPM/volume control, randomize, neon glow cells. Pushed to GitHub: https://github.com/Kiloooai/neon-step-sequencer
@@ -93,4 +94,5 @@ Type 3 browser toys (public repos):
 38. neon-step-sequencer
 39. neon-particle-life
 40. neon-flow-field
-41. neon-pendulum-wave ← latest
+41. neon-pendulum-wave
+42. neon-double-pendulum ← latest
