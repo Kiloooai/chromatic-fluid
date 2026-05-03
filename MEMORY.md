@@ -2,6 +2,7 @@
 
 ## Build History
 
+- **2026-05-03**: Created "Neon Circuit Sandbox" — interactive logic circuit simulator with drag-and-drop gates (AND/OR/XOR/NOT), toggle switches, live voltage propagation, glowing wires indicating HIGH/LOW, right-click wire deletion, switch double-toggle, clear/reset controls. Pushed to GitHub: https://github.com/Kiloooai/neon-circuit-sandbox
 - **2026-05-02**: Created "Neon Audio Visualizer" — real-time microphone-driven audio visualizer with 4 modes (frequency bars, circular wave, starfield pulse, waveform), adjustable sensitivity/smoothing/bar-count/glow, multiple color schemes (rainbow/cyber/fire/ice/matrix/sunset), neon glow effects. Pushed to GitHub: https://github.com/Kiloooai/neon-audio-visualizer
 - **2026-05-02**: Created "Neon Particle Fountain" — interactive particle emitter with gravity, bounce, wind, adjustable burst count/speed/spread/lifetime/glow, multiple color modes (rainbow/fire/ice/neon/matrix), drag-to-shoot continuous streams. Pushed to GitHub: https://github.com/Kiloooai/neon-particle-fountain
 - **2026-05-02**: Created "Neon Elastic Web" — interactive elastic mesh network with glowing nodes and spring edges, drag nodes to stretch, bounce and snap back, stress glow under tension, multiple color modes (cyan/magenta/green/rainbow/stress), adjustable physics parameters. Pushed to GitHub: https://github.com/Kiloooai/neon-elastic-web
@@ -74,4 +75,5 @@ Type 3 browser toys (public repos):
 28. neon-spiral-painter
 29. neon-elastic-web
 30. neon-particle-fountain
-31. neon-audio-visualizer ← latest
+31. neon-audio-visualizer
+32. neon-circuit-sandbox ← latest
