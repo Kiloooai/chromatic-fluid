@@ -2,6 +2,7 @@
 
 ## Build History
 
+- **2026-05-03**: Created "Neon Metaballs" — organic gooey blobs via CSS blur+contrast filter; multiple floating orbs merge and split; adjustable blob count/base radius/blur/contrast/speed/color cycle; click to add. Pushed to GitHub: https://github.com/Kiloooai/neon-metaballs
 - **2026-05-03**: Created "Neon Boids" — flocking simulation with separation/alignment/cohesion rules; neon trails; adjustable boid count/perception radius/rule weights/max speed/trail length; click to scatter. Pushed to GitHub: https://github.com/Kiloooai/neon-boids
 - **2026-05-03**: Created "Neon Dendrite" — diffusion-limited aggregation fractal growth; particles randomly walk until they touch cluster and stick, forming branching lightning-like structures; multiple seeds, neon glow; adjustable walker count/spawn rate/stickiness/step size/color speed; click to seed. Pushed to GitHub: https://github.com/Kiloooai/neon-dendrite
 - **2026-05-03**: Created "Neon Double Pendulum" — chaotic compound pendulum with two arms, sensitive to initial conditions; drag to set start angle, release to swing; neon trails; adjustable masses/lengths/gravity/friction/trail fade; energy readout. Pushed to GitHub: https://github.com/Kiloooai/neon-double-pendulum
@@ -99,4 +100,5 @@ Type 3 browser toys (public repos):
 41. neon-pendulum-wave
 42. neon-double-pendulum
 43. neon-dendrite
-44. neon-boids ← latest
+44. neon-boids
+45. neon-metaballs ← latest
