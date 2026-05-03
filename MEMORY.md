@@ -2,6 +2,7 @@
 
 ## Build History
 
+- **2026-05-03**: Created "Neon Particle Life" — emergent multi-type particle simulation with attract/repel rules, neon glow, mouse to add particles, adjustable radius/force/friction, randomize rules. Pushed to GitHub: https://github.com/Kiloooai/neon-particle-life
 - **2026-05-03**: Created "Neon Step Sequencer" — 16-step music sequencer with 4 synth tracks (sine/square/saw/triangle), click grid to toggle notes, play/stop loop, BPM/volume control, randomize, neon glow cells. Pushed to GitHub: https://github.com/Kiloooai/neon-step-sequencer
 - **2026-05-03**: Created "Neon Gray-Scott" — reaction-diffusion simulator with self-organizing chemical patterns (spots, stripes, waves), adjustable feed/kill/diffusion rates, click/drag to inject chemical V, neon color rendering. Pushed to GitHub: https://github.com/Kiloooai/neon-gray-scott
 - **2026-05-03**: Created "Neon Plasma Globe" — interactive electric discharge visualizer with rays emanating from center, attracted to mouse, branching, flicker, adjustable ray count/branch chance/decay/jitter/glow, multiple color schemes, click for burst. Pushed to GitHub: https://github.com/Kiloooai/neon-plasma-globe
@@ -88,4 +89,5 @@ Type 3 browser toys (public repos):
 35. neon-orbital
 36. neon-plasma-globe
 37. neon-gray-scott
-38. neon-step-sequencer ← latest
+38. neon-step-sequencer
+39. neon-particle-life ← latest
