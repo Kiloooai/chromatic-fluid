@@ -2,6 +2,7 @@
 
 ## Build History
 
+- **2026-05-03**: Created "Neon Orbital" — N-body gravitational simulator with glowing planets and trails, real-time mutual gravity, click to add/right-click to delete planets, adjustable gravity/trail length/mass range/initial count, pause/reset/random controls. Pushed to GitHub: https://github.com/Kiloooai/neon-orbital
 - **2026-05-03**: Created "Neon Tree Generator" — recursive fractal tree generator with adjustable branch angle, length decay, recursion depth, branchiness (2–4), base thickness, hue/hue-shift, animation speed; animated branch growth; neon glow; randomize. Pushed to GitHub: https://github.com/Kiloooai/neon-tree-generator
 - **2026-05-03**: Created "Neon Circuit Sandbox" — interactive logic circuit simulator with drag-and-drop gates (AND/OR/XOR/NOT), toggle switches, live voltage propagation, glowing wires indicating HIGH/LOW, right-click wire deletion, switch double-toggle, clear/reset controls. Pushed to GitHub: https://github.com/Kiloooai/neon-circuit-sandbox
 - **2026-05-02**: Created "Neon Audio Visualizer" — real-time microphone-driven audio visualizer with 4 modes (frequency bars, circular wave, starfield pulse, waveform), adjustable sensitivity/smoothing/bar-count/glow, multiple color schemes (rainbow/cyber/fire/ice/matrix/sunset), neon glow effects. Pushed to GitHub: https://github.com/Kiloooai/neon-audio-visualizer
@@ -11,11 +12,11 @@
 - **2026-05-02**: Created "Neon Tron" — light cycle survival game with permanent glowing trail, energy orb collection, increasing speed, classic Tron aesthetic. Pushed to GitHub: https://github.com/Kiloooai/neon-tron
 - **2026-05-02**: Created "Neon Simon" — memory sequence game with four glowing neon pads, increasing pattern length, keyboard (Q/W/A/S) and touch input, score and high score persistence. Pushed to GitHub: https://github.com/Kiloooai/neon-simon
 - **2026-05-02**: Created "Neon Garden" — interactive flower planting simulation with glowing neon stems/buds, growth animation, swaying in wind, falling petals, five color palettes (cyber/sunset/forest/ocean/rainbow), adjustable growth speed/wind/petal fall. Pushed to GitHub: https://github.com/Kiloooai/neon-garden
-- **2026-05-02**: Created "Neon Fireflies" — interactive simulation of glowing fireflies with trails, mouse attraction, burst on click, adjustable count/speed/glow/trail, multiple color palettes (mixed/blue/green/gold/rainbow). Pushed to GitHub: https://github.com/Kiloooai/neon-fireflies
+- **2026-05-02**: Created "Neon Fireflies" — interactive simulation of glowing fireflies with trails, mouse attraction, burst on click, adjustable count/speed/glow/trail and multiple color palettes (mixed/blue/green/gold/rainbow). Pushed to GitHub: https://github.com/Kiloooai/neon-fireflies
 - **2026-05-02**: Created "Neon Cells" — Game of Life cellular automaton with neon glowing cells, multiple rule sets (Conway/HighLife/Seeds/Maze), color palettes (cyber/inferno/matrix/ocean/rainbow/mono), click/drag drawing, speed control, density presets. Pushed to GitHub: https://github.com/Kiloooai/neon-cells
 - **2026-05-02**: Created "Neon Fractal Explorer" — interactive Mandelbrot set viewer with neon color palettes (rainbow/cyberpunk/inferno/matrix/ocean/sunset), smooth coloring, adjustable quality, zoom/pan/scroll navigation, real-time stats, and screenshot save. Pushed to GitHub: https://github.com/Kiloooai/neon-fractal-explorer
 - **2026-05-02**: Created "Neon Snake" — classic arcade snake game with neon glow, gradient tail, score tracking, high score persistence, mobile controls, increasing speed with progression. Pushed to GitHub: https://github.com/Kiloooai/neon-snake
-- **2026-05-02**: Created "Neon Pulse" — rhythmic visualizer with pulsing neon orbs, expanding rings, beat indicator, drag-to-adjust-tempo, multiple time signatures (4/4, 3/4, 5/4, 7/4), visual modes (rings/waves/orbits). Interactive rhythm toy. Pushed to GitHub: https://github.com/Kiloooai/neon-pulse
+- **2026-05-02**: Created "Neon Pulse" — rhythmic visualizer with pulsing neon orbs, expanding rings, beat indicator, drag-to-adjust tempo, multiple time signatures (4/4, 3/4, 5/4, 7/4), visual modes (rings/waves/orbits). Interactive rhythm toy. Pushed to GitHub: https://github.com/Kiloooai/neon-pulse
 - **2026-05-02**: Created "Neon Ripples" — interactive ripple tank simulation with expanding rings, adjustable damping/wave-speed/radius/line-width, multiple color schemes (cyan/magenta/gold/rainbow/matrix), auto mode, and click-to-create waves. Pushed to GitHub: https://github.com/Kiloooai/neon-ripples
 - **2026-05-02**: Created "Neon Lava Lamp" — interactive blobs simulation with rising wobbling blobs, glow effects, click to add, adjustable count/speed/size/wobble, multiple color schemes (classic/cyber/rainbow/matrix/sunset). Pushed to GitHub: https://github.com/Kiloooai/neon-lava-lamp
 - **2026-05-02**: Created "Bouncing DVD" — classic screensaver with color cycling, corner scoring, speed escalation, sarcastic commentary, screen crack effect, and click speed boost. Pure nostalgia with a score. Pushed to GitHub: https://github.com/Kiloooai/bouncing-dvd
@@ -79,4 +80,5 @@ Type 3 browser toys (public repos):
 31. neon-audio-visualizer
 32. neon-circuit-sandbox
 33. neon-harmonograph
-34. neon-tree-generator ← latest
+34. neon-tree-generator
+35. neon-orbital ← latest
