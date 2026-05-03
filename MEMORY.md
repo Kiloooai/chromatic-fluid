@@ -2,6 +2,7 @@
 
 ## Build History
 
+- **2026-05-03**: Created "Neon Gray-Scott" — reaction-diffusion simulator with self-organizing chemical patterns (spots, stripes, waves), adjustable feed/kill/diffusion rates, click/drag to inject chemical V, neon color rendering. Pushed to GitHub: https://github.com/Kiloooai/neon-gray-scott
 - **2026-05-03**: Created "Neon Plasma Globe" — interactive electric discharge visualizer with rays emanating from center, attracted to mouse, branching, flicker, adjustable ray count/branch chance/decay/jitter/glow, multiple color schemes, click for burst. Pushed to GitHub: https://github.com/Kiloooai/neon-plasma-globe
 - **2026-05-03**: Created "Neon Orbital" — N-body gravitational simulator with glowing planets and trails, real-time mutual gravity, click to add/right-click to delete planets, adjustable gravity/trail length/mass range/initial count, pause/reset/random controls. Pushed to GitHub: https://github.com/Kiloooai/neon-orbital
 - **2026-05-03**: Created "Neon Tree Generator" — recursive fractal tree generator with adjustable branch angle, length decay, recursion depth, branchiness (2–4), base thickness, hue/hue-shift, animation speed; animated branch growth; neon glow; randomize. Pushed to GitHub: https://github.com/Kiloooai/neon-tree-generator
@@ -24,6 +25,7 @@
 - **2026-05-02**: Created "Pixel Piano" — retro 8-bit chiptone synthesizer with waveform selection (square/sawtooth/triangle/sine), ADSR envelope controls, octave shifting, arpeggiator, and real-time frequency visualizer. Pure Web Audio oscillators, no external samples. Interactive music toy. Pushed to GitHub: https://github.com/Kiloooai/pixel-piano
 - **2026-05-01**: Created "Gravity Sink" — interactive gravitational black hole simulator with adjustable gravity strength, particle count, trail length, multiple color modes (cyan/magenta/gold/rainbow), mouse influence multiplier, attraction/repulsion toggle, and explosion mechanic. Pushed to GitHub: https://github.com/Kiloooai/gravity-sink
 - **2026-05-01**: Created "Desktop Pet Rock" — virtual pet rock with happiness system, dust accumulation, gem collection, rolling away mechanic, blink animation, and secret naming. Pushed to GitHub: https://github.com/Kiloooai/desktop-pet-rock
+- **2026-05-01**: Created "Chaotic Typography" — interactive canvas-based text chaos generator with adjustable letter spacing, rotation, skew, font size ranges, multiple color modes (fixed/random/rainbow), glitch intensity, fade control, and particle effects. Pushed to GitHub: https://github.com/Kiloooai/chaotic-typography
 - **2026-05-01**: Created "Chaotic Typography" — interactive canvas-based text chaos generator with adjustable letter spacing, rotation, skew, font size ranges, multiple color modes (fixed/random/rainbow), glitch intensity, fade control, and particle effects. Pushed to GitHub: https://github.com/Kiloooai/chaotic-typography
 - **2026-04-30**: Created "Neon Fireworks Studio" — interactive canvas-based firework simulator with customizable colors, size, particle count, gravity, wind, auto mode, and right-click burst. Full particle physics with trails and glow effects. Pushed to GitHub: https://github.com/Kiloooai/neon-fireworks-studio
 - **2026-04-29**: Created "Emotionally Fragile Button" — interactive button with feelings, mood system, abandonment recovery, and secret spacebar comfort easter egg. Pushed to GitHub: https://github.com/Kiloooai/emotionally-fragile-button
@@ -83,4 +85,5 @@ Type 3 browser toys (public repos):
 33. neon-harmonograph
 34. neon-tree-generator
 35. neon-orbital
-36. neon-plasma-globe ← latest
+36. neon-plasma-globe
+37. neon-gray-scott ← latest
