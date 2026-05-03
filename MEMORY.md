@@ -2,6 +2,7 @@
 
 ## Build History
 
+- **2026-05-03**: Created "Neon Boids" — flocking simulation with separation/alignment/cohesion rules; neon trails; adjustable boid count/perception radius/rule weights/max speed/trail length; click to scatter. Pushed to GitHub: https://github.com/Kiloooai/neon-boids
 - **2026-05-03**: Created "Neon Dendrite" — diffusion-limited aggregation fractal growth; particles randomly walk until they touch cluster and stick, forming branching lightning-like structures; multiple seeds, neon glow; adjustable walker count/spawn rate/stickiness/step size/color speed; click to seed. Pushed to GitHub: https://github.com/Kiloooai/neon-dendrite
 - **2026-05-03**: Created "Neon Double Pendulum" — chaotic compound pendulum with two arms, sensitive to initial conditions; drag to set start angle, release to swing; neon trails; adjustable masses/lengths/gravity/friction/trail fade; energy readout. Pushed to GitHub: https://github.com/Kiloooai/neon-double-pendulum
 - **2026-05-03**: Created "Neon Flow Field" — emergent vector field visualizer with particles gliding through dynamically shifting flow; adjustable particle count/speed/noise scale/time evolution/trail fade/color cycling; click to add particles; neon direction-based coloring. Pushed to GitHub: https://github.com/Kiloooai/neon-flow-field
@@ -97,4 +98,5 @@ Type 3 browser toys (public repos):
 40. neon-flow-field
 41. neon-pendulum-wave
 42. neon-double-pendulum
-43. neon-dendrite ← latest
+43. neon-dendrite
+44. neon-boids ← latest
