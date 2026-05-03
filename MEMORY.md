@@ -2,6 +2,7 @@
 
 ## Build History
 
+- **2026-05-03**: Created "Neon Plasma Globe" — interactive electric discharge visualizer with rays emanating from center, attracted to mouse, branching, flicker, adjustable ray count/branch chance/decay/jitter/glow, multiple color schemes, click for burst. Pushed to GitHub: https://github.com/Kiloooai/neon-plasma-globe
 - **2026-05-03**: Created "Neon Orbital" — N-body gravitational simulator with glowing planets and trails, real-time mutual gravity, click to add/right-click to delete planets, adjustable gravity/trail length/mass range/initial count, pause/reset/random controls. Pushed to GitHub: https://github.com/Kiloooai/neon-orbital
 - **2026-05-03**: Created "Neon Tree Generator" — recursive fractal tree generator with adjustable branch angle, length decay, recursion depth, branchiness (2–4), base thickness, hue/hue-shift, animation speed; animated branch growth; neon glow; randomize. Pushed to GitHub: https://github.com/Kiloooai/neon-tree-generator
 - **2026-05-03**: Created "Neon Circuit Sandbox" — interactive logic circuit simulator with drag-and-drop gates (AND/OR/XOR/NOT), toggle switches, live voltage propagation, glowing wires indicating HIGH/LOW, right-click wire deletion, switch double-toggle, clear/reset controls. Pushed to GitHub: https://github.com/Kiloooai/neon-circuit-sandbox
@@ -81,4 +82,5 @@ Type 3 browser toys (public repos):
 32. neon-circuit-sandbox
 33. neon-harmonograph
 34. neon-tree-generator
-35. neon-orbital ← latest
+35. neon-orbital
+36. neon-plasma-globe ← latest
