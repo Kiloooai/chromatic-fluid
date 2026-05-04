@@ -1,8 +1,9 @@
 # Long-Term Memory
 
 ## Build History
-- **2026-05-04**: Created "Neon Wave Interference" — wave superposition simulator; multiple point sources emit radial sine waves that interfere, creating moiré patterns and nodal lines; neon glow, click to add sources, adjustable speed/frequency/amplitude. Pushed to GitHub: https://github.com/Kiloooai/neon-wave-interference
+- **2026-05-04**: Created "Neon Membrane" — interactive elastic membrane simulation; grid of spring-connected masses; drag to push/pull surface, watch waves propagate and interfere with neon glow; adjustable tension, damping, mouse radius, force. Pushed to GitHub: https://github.com/Kiloooai/neon-membrane
 
+- **2026-05-04**: Created "Neon Wave Interference" — wave superposition simulator; multiple point sources emit radial sine waves that interfere, creating moiré patterns and nodal lines; neon glow, click to add sources, adjustable speed/frequency/amplitude. Pushed to GitHub: https://github.com/Kiloooai/neon-wave-interference
 - **2026-05-04**: Created "Neon Spirograph" — classic spirograph/hypotrochoid pattern generator; rolling circles create intricate neon curves; adjustable outer/inner radii, pen offset, line width, draw speed, color cycle; neon glow. Pushed to GitHub: https://github.com/Kiloooai/neon-spirograph
 - **2026-05-04**: Created "Neon String Art" — interactive geometric pattern generator using classic string art; points on a circle connected by chords create cardioids, nephroids, and other mathematical curves; adjustable point count, skip factor, line width, rotation and color speed; neon glow. Pushed to GitHub: https://github.com/Kiloooai/neon-string-art
 - **2026-05-04**: Created "Neon Constellation" — interactive particle constellation network; stars drift and connect when close, forming shifting geometric patterns of neon light; adjustable count/distance/speed/color cycle/line width; click to add stars. Pushed to GitHub: https://github.com/Kiloooai/neon-constellation
@@ -118,6 +119,8 @@ Type 3 browser toys (public repos):
 49. neon-turing-patterns
 50. neon-wireworld
 51. neon-voronoi
-52. neon-string-art
-53. neon-spirograph
-54. neon-wave-interference ← latest
+52. neon-constellation
+53. neon-string-art
+54. neon-spirograph
+55. neon-wave-interference
+56. neon-membrane ← latest
