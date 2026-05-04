@@ -1,6 +1,7 @@
 # Long-Term Memory
 
 ## Build History
+- **2026-05-04**: Created "Neon Magnetics" — interactive magnetic field line visualizer; place north/south poles, watch glowing field lines trace vector field; draggable magnets, adjustable line density/step/fade/color cycle. Pushed to GitHub: https://github.com/Kiloooai/neon-magnetics
 - **2026-05-04**: Created "Neon Jellyfish" — interactive neon jellyfish simulation; pulsing bell, undulating tentacles with wave motion, follows cursor; adjustable tentacle count/segments/swim speed/wave amplitude/frequency; neon glow. Pushed to GitHub: https://github.com/Kiloooai/neon-jellyfish
 - **2026-05-04**: Created "Neon Membrane" — interactive elastic membrane simulation; grid of spring-connected masses; drag to push/pull surface, watch waves propagate and interfere with neon glow; adjustable tension, damping, mouse radius, force. Pushed to GitHub: https://github.com/Kiloooai/neon-membrane
 
@@ -125,4 +126,5 @@ Type 3 browser toys (public repos):
 54. neon-spirograph
 55. neon-wave-interference
 56. neon-membrane
-57. neon-jellyfish ← latest
+57. neon-jellyfish
+58. neon-magnetics ← latest
