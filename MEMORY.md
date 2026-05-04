@@ -2,6 +2,7 @@
 
 ## Build History
 
+- **2026-05-04**: Created "Neon String Art" — interactive geometric pattern generator using classic string art; points on a circle connected by chords create cardioids, nephroids, and other mathematical curves; adjustable point count, skip factor, line width, rotation and color speed; neon glow. Pushed to GitHub: https://github.com/Kiloooai/neon-string-art
 - **2026-05-04**: Created "Neon Constellation" — interactive particle constellation network; stars drift and connect when close, forming shifting geometric patterns of neon light; adjustable count/distance/speed/color cycle/line width; click to add stars. Pushed to GitHub: https://github.com/Kiloooai/neon-constellation
 - **2026-05-04**: Created "Neon Voronoi" — dynamic Voronoi diagram with drifting neon seeds; each pixel colored by nearest seed; adjustable seed count/move speed/color cycle; click to add seeds; low-res grid scaled up for retro pixel neon look. Pushed to GitHub: https://github.com/Kiloooai/neon-voronoi
 - **2026-05-04**: Created "Neon Wireworld" — cellular automaton simulating electronic circuits; draw wires, place electron heads/tails, watch signals propagate; adjustable brush size, sim speed, step, clear, random; neon glow. Pushed to GitHub: https://github.com/Kiloooai/neon-wireworld
@@ -115,4 +116,4 @@ Type 3 browser toys (public repos):
 49. neon-turing-patterns
 50. neon-wireworld
 51. neon-voronoi
-52. neon-constellation ← latest
+52. neon-string-art ← latest
