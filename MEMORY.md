@@ -2,6 +2,7 @@
 
 ## Build History
 
+- **2026-05-04**: Created "Neon Wireworld" — cellular automaton simulating electronic circuits; draw wires, place electron heads/tails, watch signals propagate; adjustable brush size, sim speed, step, clear, random; neon glow. Pushed to GitHub: https://github.com/Kiloooai/neon-wireworld
 - **2026-05-04**: Created "Neon Turing Patterns" — Gray-Scott reaction-diffusion activator-inhibitor; emergent spots/stripes/mazes/worms; adjustable feed/kill/diffusion rates, timestep, color speed; click to inject activator; presets; neon glow rendering. Pushed to GitHub: https://github.com/Kiloooai/neon-turing-patterns
 - **2026-05-04**: Created "Neon Strange Attractor" — Lorenz and Rossler chaotic systems visualized with neon trails; adjustable ODE parameters, sim speed, color cycle, trail width; click to add trajectories; pause/clear/randomize. Pushed to GitHub: https://github.com/Kiloooai/neon-strange-attractor
 - **2026-05-04**: Created "Neon Kaleidoscope" — radial symmetry particle emitter creates mandala patterns; adjustable symmetry count/max particles/emission rate/speed/size/trail fade/color cycle; click to burst particles; slowly rotating axes. Pushed to GitHub: https://github.com/Kiloooai/neon-kaleidoscope
@@ -109,4 +110,5 @@ Type 3 browser toys (public repos):
 46. neon-slime-mold
 47. neon-kaleidoscope
 48. neon-strange-attractor
-49. neon-turing-patterns ← latest
+49. neon-turing-patterns
+50. neon-wireworld ← latest
