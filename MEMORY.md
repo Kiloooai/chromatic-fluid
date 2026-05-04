@@ -1,6 +1,7 @@
 # Long-Term Memory
 
 ## Build History
+- **2026-05-04**: Created "Neon Wave Interference" — wave superposition simulator; multiple point sources emit radial sine waves that interfere, creating moiré patterns and nodal lines; neon glow, click to add sources, adjustable speed/frequency/amplitude. Pushed to GitHub: https://github.com/Kiloooai/neon-wave-interference
 
 - **2026-05-04**: Created "Neon Spirograph" — classic spirograph/hypotrochoid pattern generator; rolling circles create intricate neon curves; adjustable outer/inner radii, pen offset, line width, draw speed, color cycle; neon glow. Pushed to GitHub: https://github.com/Kiloooai/neon-spirograph
 - **2026-05-04**: Created "Neon String Art" — interactive geometric pattern generator using classic string art; points on a circle connected by chords create cardioids, nephroids, and other mathematical curves; adjustable point count, skip factor, line width, rotation and color speed; neon glow. Pushed to GitHub: https://github.com/Kiloooai/neon-string-art
@@ -118,4 +119,5 @@ Type 3 browser toys (public repos):
 50. neon-wireworld
 51. neon-voronoi
 52. neon-string-art
-53. neon-spirograph ← latest
+53. neon-spirograph
+54. neon-wave-interference ← latest
