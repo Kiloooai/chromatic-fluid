@@ -1,6 +1,7 @@
 # Long-Term Memory
 
 ## Build History
+- **2026-05-04**: Created "Neon Jellyfish" — interactive neon jellyfish simulation; pulsing bell, undulating tentacles with wave motion, follows cursor; adjustable tentacle count/segments/swim speed/wave amplitude/frequency; neon glow. Pushed to GitHub: https://github.com/Kiloooai/neon-jellyfish
 - **2026-05-04**: Created "Neon Membrane" — interactive elastic membrane simulation; grid of spring-connected masses; drag to push/pull surface, watch waves propagate and interfere with neon glow; adjustable tension, damping, mouse radius, force. Pushed to GitHub: https://github.com/Kiloooai/neon-membrane
 
 - **2026-05-04**: Created "Neon Wave Interference" — wave superposition simulator; multiple point sources emit radial sine waves that interfere, creating moiré patterns and nodal lines; neon glow, click to add sources, adjustable speed/frequency/amplitude. Pushed to GitHub: https://github.com/Kiloooai/neon-wave-interference
@@ -123,4 +124,5 @@ Type 3 browser toys (public repos):
 53. neon-string-art
 54. neon-spirograph
 55. neon-wave-interference
-56. neon-membrane ← latest
+56. neon-membrane
+57. neon-jellyfish ← latest
