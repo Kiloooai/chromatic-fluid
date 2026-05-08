@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Fluid</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #000;
+            overflow: hidden;
+            font-family: 'Courier New', monospace;
+            color: #0ff;
+            text-shadow: 0 0 5px #0ff;
+            cursor: crosshair;
+        }
+        canvas { display: block; }
+        .controls {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.7);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(0,255,255,0.3);
+            backdrop-filter: blur(5px);
+            z-index: 100;
+            user-select: none;
+            width: 220px;
+        }
+        .controls h2 {
+            margin-bottom: 12px;
+            font-size: 16px;
+            color: #0f0;
+            text-shadow: 0 0 10px #0f0;
+        }
+        .control-group {
+            margin-bottom: 10px;
+        }
+        .control-group label {
+            display: block;
+            font-size: 10px;
+            color: #ff0;
+            margin-bottom: 4px;
+        }
+        input[type="range"] {
+            width: 100%;
+            accent-color: #0ff;
+        }
+        .value-display {
+            float: right;
+            color: #fff;
+            font-weight: bold;
+            font-size: 11px;
+        }
+        .buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        button {
+            flex: 1;
+            padding: 8px;
+            background: transparent;
+            border: 1px solid #0ff;
+            color: #0ff;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 11px;
+            transition: all 0.2s;
+        }
+        button:hover {
+            background: rgba(0,255,255,0.1);
+            box-shadow: 0 0 10px rgba(0,255,255,0.3);
+        }
+        .stats {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: #f0f;
+            text-shadow: 0 0 8px #f0f;
+            font-size: 12px;
+            background: rgba(0,0,0,0.7);
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,0,255,0.3);
+        }
+        .instructions {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #888;
+            font-size: 12px;
+            text-align: center;
+            max-width: 500px;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+
+    <div class="controls">
+        <h2>🌊 NEON FLUID</h2>
+
+        <div class="control-group">
+            <label>Brush Size <span class="value-display" id="brushVal">2</span></label>
+            <input type="range" id="brushSize" min="1" max="5" value="2">
+        </div>
+
+        <div class="control-group">
+            <label>Vel Dissipation <span class="value-display" id="velDissVal">0.98</span></label>
+            <input type="range" id="velDiss" min="0.90" max="0.999" step="0.001" value="0.98">
+        </div>
+
+        <div class="control-group">
+            <label>Dens Dissipation <span class="value-display" id="densDissVal">0.99</span></label>
+            <input type="range" id="densDiss" min="0.90" max="0.999" step="0.001" value="0.99">
+        </div>
+
+        <div class="control-group">
+            <label>Pressure Iter <span class="value-display" id="pressIterVal">20</span></label>
+            <input type="range" id="pressureIter" min="5" max="50" value="20">
+        </div>
+
+        <div class="control-group">
+            <label>Color Cycle <span class="value-display" id="colorSpeedVal">0.5</span></label>
+            <input type="range" id="colorSpeed" min="0" max="2" step="0.1" value="0.5">
+        </div>
+
+        <div class="buttons">
+            <button id="pauseBtn">Pause</button>
+            <button id="clearBtn">Clear</button>
+        </div>
+
+        <div class="buttons">
+            <button id="randomBtn">Randomize</button>
+        </div>
+    </div>
+
+    <div class="stats">
+        <div>FPS: <span id="fps">60</span></div>
+        <div>Max Density: <span id="maxDens">0.00</span></div>
+    </div>
+
+    <div class="instructions">
+        Real-time Navier-Stokes fluid simulation. Drag to add dye and stir. Adjust dissipation, pressure solver iterations, color speed. Watch neon currents swirl.
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Controls
+        const brushSlider = document.getElementById('brushSize');
+        const velDissSlider = document.getElementById('velDiss');
+        const densDissSlider = document.getElementById('densDiss');
+        const pressureIterSlider = document.getElementById('pressureIter');
+        const colorSpeedSlider = document.getElementById('colorSpeed');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const randomBtn = document.getElementById('randomBtn');
+
+        let width, height;
+        let running = true;
+        let lastTime = 0;
+        let frameCount = 0;
+        let lastFpsTime = 0;
+        let hueCycle = 0;
+
+        // Grid scale: smaller = higher resolution but slower
+        const SCALE = 6;
+        let cols, rows, N;
+        let u, v, uNext, vNext, d, dNext, p, pNew, div;
+
+        // Offscreen canvas for low-res grid rendering
+        const gridCanvas = document.createElement('canvas');
+        const gridCtx = gridCanvas.getContext('2d');
+        let imgData = null;
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            cols = Math.floor(width / SCALE);
+            rows = Math.floor(height / SCALE);
+            N = cols * rows;
+            gridCanvas.width = cols;
+            gridCanvas.height = rows;
+            initArrays();
+            resetFluid();
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        function initArrays() {
+            u = new Float32Array(N);
+            v = new Float32Array(N);
+            uNext = new Float32Array(N);
+            vNext = new Float32Array(N);
+            d = new Float32Array(N);
+            dNext = new Float32Array(N);
+            p = new Float32Array(N);
+            pNew = new Float32Array(N);
+            div = new Float32Array(N);
+            imgData = gridCtx.createImageData(cols, rows);
+        }
+
+        function resetFluid() {
+            u.fill(0);
+            v.fill(0);
+            d.fill(0);
+            p.fill(0);
+            pNew.fill(0);
+            div.fill(0);
+            hueCycle = 0;
+        }
+
+        // Grid index with wrap (not needed if we use direct loops, but keep for sampling)
+        function idx(x, y) {
+            const wx = (x % cols + cols) % cols;
+            const wy = (y % rows + rows) % rows;
+            return wy * cols + wx;
+        }
+
+        // Sample field with bilinear interpolation (wrap)
+        function sample(arr, x, y) {
+            const x0 = Math.floor(x);
+            const y0 = Math.floor(y);
+            const x1 = (x0 + 1) % cols;
+            const y1 = (y0 + 1) % rows;
+            x0 = (x0 % cols + cols) % cols;
+            y0 = (y0 % rows + rows) % rows;
+            const sx = x - Math.floor(x);
+            const sy = y - Math.floor(y);
+            const i00 = y0 * cols + x0;
+            const i01 = y0 * cols + x1;
+            const i10 = y1 * cols + x0;
+            const i11 = y1 * cols + x1;
+            const a = arr[i00];
+            const b = arr[i01];
+            const c = arr[i10];
+            const constVal = arr[i11];
+            const top = a * (1 - sx) + b * sx;
+            const bottom = c * (1 - sx) + constVal * sx;
+            return top * (1 - sy) + bottom * sy;
+        }
+
+        // Advect scalar field (density)
+        function advectScalar(src, dest, uField, vField, dt) {
+            for (let y = 0; y < rows; y++) {
+                for (let x = 0; x < cols; x++) {
+                    const i = y * cols + x;
+                    const sx = x - dt * uField[i];
+                    const sy = y - dt * vField[i];
+                    dest[i] = sample(src, sx, sy);
+                }
+            }
+        }
+
+        // Advect vector field (velocity)
+        function advectVelocity(uSrc, vSrc, uDest, vDest, dt) {
+            for (let y = 0; y < rows; y++) {
+                for (let x = 0; x < cols; x++) {
+                    const i = y * cols + x;
+                    const sx = x - dt * uSrc[i];
+                    const sy = y - dt * vSrc[i];
+                    uDest[i] = sample(uSrc, sx, sy);
+                    vDest[i] = sample(vSrc, sx, sy);
+                }
+            }
+        }
+
+        // Projection: make velocity divergence-free
+        function project(uField, vField, iterations) {
+            // Compute divergence
+            for (let y = 0; y < rows; y++) {
+                for (let x = 0; x < cols; x++) {
+                    const i = y * cols + x;
+                    const xm1 = x === 0 ? cols - 1 : x - 1;
+                    const xp1 = x === cols - 1 ? 0 : x + 1;
+                    const ym1 = y === 0 ? rows - 1 : y - 1;
+                    const yp1 = y === rows - 1 ? 0 : y + 1;
+                    const iLeft = y * cols + xm1;
+                    const iRight = y * cols + xp1;
+                    const iUp = ym1 * cols + x;
+                    const iDown = yp1 * cols + x;
+                    div[i] = 0.5 * ((uField[iRight] - uField[iLeft]) + (vField[iDown] - vField[iUp]));
+                    p[i] = 0;
+                }
+            }
+
+            // Jacobi iterations
+            for (let it = 0; it < iterations; it++) {
+                for (let y = 0; y < rows; y++) {
+                    for (let x = 0; x < cols; x++) {
+                        const i = y * cols + x;
+                        const xm1 = x === 0 ? cols - 1 : x - 1;
+                        const xp1 = x === cols - 1 ? 0 : x + 1;
+                        const ym1 = y === 0 ? rows - 1 : y - 1;
+                        const yp1 = y === rows - 1 ? 0 : y + 1;
+                        const iLeft = y * cols + xm1;
+                        const iRight = y * cols + xp1;
+                        const iUp = ym1 * cols + x;
+                        const iDown = yp1 * cols + x;
+                        pNew[i] = (p[iLeft] + p[iRight] + p[iUp] + p[iDown] - div[i]) * 0.25;
+                    }
+                }
+                // swap p and pNew
+                let temp = p; p = pNew; pNew = temp;
+            }
+
+            // Subtract pressure gradient
+            for (let y = 0; y < rows; y++) {
+                for (let x = 0; x < cols; x++) {
+                    const i = y * cols + x;
+                    const xm1 = x === 0 ? cols - 1 : x - 1;
+                    const xp1 = x === cols - 1 ? 0 : x + 1;
+                    const ym1 = y === 0 ? rows - 1 : y - 1;
+                    const yp1 = y === rows - 1 ? 0 : y + 1;
+                    const iLeft = y * cols + xm1;
+                    const iRight = y * cols + xp1;
+                    const iUp = ym1 * cols + x;
+                    const iDown = yp1 * cols + x;
+                    uField[i] -= 0.5 * (p[iRight] - p[iLeft]);
+                    vField[i] -= 0.5 * (p[iDown] - p[iUp]);
+                }
+            }
+        }
+
+        // One simulation step
+        function fluidStep() {
+            // Advect velocity
+            advectVelocity(u, v, uNext, vNext, 1);
+            // swap
+            let tmp = u; u = uNext; uNext = tmp;
+            tmp = v; v = vNext; vNext = tmp;
+
+            // Project
+            project(u, v, parseInt(pressureIterSlider.value));
+
+            // Advect density
+            advectScalar(d, dNext, u, v, 1);
+            tmp = d; d = dNext; dNext = tmp;
+
+            // Dissipate
+            const velDiss = parseFloat(velDissSlider.value);
+            const densDiss = parseFloat(densDissSlider.value);
+            for (let i = 0; i < N; i++) {
+                u[i] *= velDiss;
+                v[i] *= velDiss;
+                d[i] *= densDiss;
+            }
+        }
+
+        // Rendering
+        function renderFluid() {
+            // Build 256-entry color palette from current hueCycle
+            const palR = new Uint8Array(256);
+            const palG = new Uint8Array(256);
+            const palB = new Uint8Array(256);
+            const hue = hueCycle % 360;
+            for (let i = 0; i < 256; i++) {
+                // Lightness increases with intensity
+                const L = 0.2 + 0.6 * (i / 255);
+                const [r, g, b] = hslToRgb(hue / 360, 1, L);
+                palR[i] = r; palG[i] = g; palB[i] = b;
+            }
+
+            const data = imgData.data;
+            for (let i = 0; i < N; i++) {
+                const intensity = Math.min(255, Math.floor(d[i] * 255));
+                const idx = i * 4;
+                data[idx] = palR[intensity];
+                data[idx + 1] = palG[intensity];
+                data[idx + 2] = palB[intensity];
+                data[idx + 3] = 255;
+            }
+            gridCtx.putImageData(imgData, 0, 0);
+
+            // Scale to full canvas
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, width, height);
+            ctx.drawImage(gridCanvas, 0, 0, width, height);
+        }
+
+        // Mouse interaction
+        let mouseDown = false;
+        let lastMouseX = 0, lastMouseY = 0;
+
+        canvas.addEventListener('mousedown', (e) => {
+            mouseDown = true;
+            lastMouseX = e.clientX;
+            lastMouseY = e.clientY;
+            addForceAt(e.clientX, e.clientY, 0, 0); // add dye
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (mouseDown) {
+                const dx = e.clientX - lastMouseX;
+                const dy = e.clientY - lastMouseY;
+                addForceAt(e.clientX, e.clientY, dx, dy);
+                lastMouseX = e.clientX;
+                lastMouseY = e.clientY;
+            }
+        });
+
+        window.addEventListener('mouseup', () => { mouseDown = false; });
+
+        function addForceAt(sx, sy, dx, dy) {
+            const gx = Math.floor(sx / SCALE);
+            const gy = Math.floor(sy / SCALE);
+            const r = parseInt(brushSlider.value);
+            // Scale velocity contribution
+            const uAdd = dx / SCALE * 0.5;
+            const vAdd = dy / SCALE * 0.5;
+            for (let oy = -r; oy <= r; oy++) {
+                for (let ox = -r; ox <= r; ox++) {
+                    if (ox*ox + oy*oy <= r*r) {
+                        const x = (gx + ox + cols) % cols;
+                        const y = (gy + oy + rows) % rows;
+                        const i = y * cols + x;
+                        u[i] += uAdd;
+                        v[i] += vAdd;
+                        d[i] = 1.0; // full dye
+                    }
+                }
+            }
+        }
+
+        // HSL to RGB helper
+        function hslToRgb(h, s, l) {
+            let r, g, b;
+            if (s === 0) {
+                r = g = b = l;
+            } else {
+                const hue2rgb = (p, q, t) => {
+                    if (t < 0) t += 1;
+                    if (t > 1) t -= 1;
+                    if (t < 1/6) return p + (q - p) * 6 * t;
+                    if (t < 1/2) return q;
+                    if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+                    return p;
+                };
+                const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+                const p = 2 * l - q;
+                r = hue2rgb(p, q, h + 1/3);
+                g = hue2rgb(p, q, h);
+                b = hue2rgb(p, q, h - 1/3);
+            }
+            return [Math.round(r*255), Math.round(g*255), Math.round(b*255)];
+        }
+
+        // Animation loop
+        function animate(timestamp) {
+            const delta = timestamp - lastTime || 16;
+            lastTime = timestamp;
+
+            frameCount++;
+            if (timestamp - lastFpsTime >= 1000) {
+                document.getElementById('fps').textContent = frameCount;
+                frameCount = 0;
+                lastFpsTime = timestamp;
+            }
+
+            if (running) {
+                fluidStep();
+                hueCycle = (hueCycle + parseFloat(colorSpeedSlider.value) * delta * 0.01) % 360;
+                renderFluid();
+
+                // Stats: max density
+                let maxD = 0;
+                for (let i = 0; i < N; i++) if (d[i] > maxD) maxD = d[i];
+                document.getElementById('maxDens').textContent = maxD.toFixed(2);
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        // UI
+        function updateDisplays() {
+            document.getElementById('brushVal').textContent = brushSlider.value;
+            document.getElementById('velDissVal').textContent = velDissSlider.value;
+            document.getElementById('densDissVal').textContent = densDissSlider.value;
+            document.getElementById('pressIterVal').textContent = pressureIterSlider.value;
+            document.getElementById('colorSpeedVal').textContent = colorSpeedSlider.value;
+        }
+
+        const sliders = [brushSlider, velDissSlider, densDissSlider, pressureIterSlider, colorSpeedSlider];
+        sliders.forEach(s => s.addEventListener('input', updateDisplays));
+
+        pauseBtn.addEventListener('click', () => {
+            running = !running;
+            pauseBtn.textContent = running ? "Pause" : "Resume";
+            if (running) animate(0);
+        });
+
+        clearBtn.addEventListener('click', () => {
+            resetFluid();
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0,0,width,height);
+            gridCtx.clearRect(0,0,cols,rows);
+        });
+
+        randomBtn.addEventListener('click', () => {
+            brushSlider.value = Math.floor(1 + Math.random() * 4);
+            velDissSlider.value = (0.90 + Math.random() * 0.099).toFixed(3);
+            densDissSlider.value = (0.90 + Math.random() * 0.099).toFixed(3);
+            pressureIterSlider.value = Math.floor(5 + Math.random() * 45);
+            colorSpeedSlider.value = (Math.random() * 2).toFixed(1);
+            updateDisplays();
+            resetFluid();
+        });
+
+        updateDisplays();
+        animate(0);
+    </script>
+</body>
+</html>

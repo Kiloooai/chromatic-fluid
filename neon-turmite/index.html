@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neon Turmite — interactive turtle automaton</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:#050505; color:#ccc; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; overflow:hidden; }
+    canvas { display:block; width:100vw; height:100vh; }
+    #ui {
+      position:absolute; top:10px; left:10px; width:300px;
+      background:rgba(10,10,20,0.85); border:1px solid #444;
+      border-radius:6px; padding:12px; font-size:13px;
+      box-shadow:0 0 10px rgba(0,255,255,0.15);
+    }
+    h2 { margin:0 0 8px 0; font-size:16px; color:#0ff; text-shadow:0 0 8px #0ff; }
+    .row { display:flex; justify-content:space-between; margin:6px 0; }
+    label { color:#aaa; }
+    input[type="range"] { width:180px; }
+    .val { color:#0f0; min-width:40px; text-align:right; }
+    button {
+      width:100%; margin:4px 0; padding:8px; background:#111; color:#0ff;
+      border:1px solid #0ff; border-radius:4px; cursor:pointer; font-size:13px;
+      box-shadow:0 0 6px rgba(0,255,255,0.3);
+    }
+    button:hover { background:#022; }
+    #stats {
+      position:absolute; top:10px; right:10px;
+      background:rgba(10,10,20,0.85); border:1px solid #444;
+      border-radius:6px; padding:10px 14px; font-size:12px;
+      box-shadow:0 0 10px rgba(0,255,255,0.15);
+    }
+    #hint {
+      position:absolute; bottom:10px; left:0; right:0; text-align:center;
+      font-size:12px; color:#666; pointer-events:none;
+    }
+  </style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="ui">
+  <h2>Neon Turmite</h2>
+  <div class="row"><label>States (2–4)</label><input id="states" type="range" min="2" max="4" value="2"><span class="val" id="v-states">2</span></div>
+  <div class="row"><label>Colors (2–4)</label><input id="colors" type="range" min="2" max="4" value="2"><span class="val" id="v-colors">2</span></div>
+  <div class="row"><label>Step delay (ms)</label><input id="delay" type="range" min="0" max="100" value="10"><span class="val" id="v-delay">10</span></div>
+  <div class="row"><label>Trail length</label><input id="trail" type="range" min="0" max="200" value="50"><span class="val" id="v-trail">50</span></div>
+  <div class="row"><label>Glow</label><input id="glow" type="range" min="0" max="50" value="15"><span class="val" id="v-glow">15</span></div>
+  <div class="row"><label>Color mode</label><input id="colorMode" type="range" min="0" max="3" value="0"><span class="val" id="v-colorMode">0</span></div>
+  <button id="randomRule">Random Rule</button>
+  <button id="clear">Clear Grid</button>
+  <button id="resetTurmite">Reset Turmite</button>
+</div>
+<div id="stats">
+  FPS: <span id="fps">0</span><br>
+  Steps: <span id="steps">0</span><br>
+  States: <span id="stateDisp">0</span><br>
+  Pos: <span id="posDisp">0,0</span>
+</div>
+<div id="hint">Click to place turmite • Drag to draw walls</div>
+<script>
+(() => {
+  const canvas = document.getElementById('c');
+  const ctx = canvas.getContext('2d');
+
+  let W, H;
+  const resize = () => { W=canvas.width=innerWidth; H=canvas.height=innerHeight; };
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Grid: each cell has a color index (0..C-1) and may have a wall (obstacle)
+  const CellSize = 6;
+  let gridW = Math.ceil(W / CellSize);
+  let gridH = Math.ceil(H / CellSize);
+  let grid; // Uint8Array: high 2 bits = wall (bit 7) and maybe reserved; low 6 bits = color index (0..C-1)
+  const WallBit = 0x80;
+  const ColorMask = 0x3F;
+
+  let C = 2; // number of colors
+  let S = 2; // number of states
+
+  // Turmite state
+  let turmite = null; // {x,y,dir(0=up,1=right,2=down,3=left), state(1..S-1), steps}
+  // Direction vectors
+  const dirs = [[0,-1],[1,0],[0,1],[-1,0]];
+
+  // Colors per mode
+  const colorSets = {
+    cyan:   [0, '#000000', '#00ffff'],
+    magenta:[0, '#000000', '#ff00ff'],
+    rainbow:[0, '#000000', '#ff0000', '#00ff00', '#0000ff'],
+    fire:   [0, '#000000', '#ffff00', '#ff8000', '#ff0000'],
+  };
+  // We'll build a palette array for current mode and C colors
+  let palette = [];
+
+  // Parameters
+  let params = {
+    states: 2,
+    colors: 2,
+    stepDelay: 10, // ms between simulation steps (0 = as fast as possible)
+    trail: 50,     // number of steps to fade trail fully (0 = no trail)
+    glow: 15,
+    colorMode: 0, // 0=cyan,1=magenta,2=rainbow,3=fire
+  };
+
+  // Simulation state
+  let lastStepTime = 0;
+  let stepsAccum = 0;
+  let lastTime = performance.now();
+  let frameCount = 0;
+  let fpsAccum = 0;
+
+  // Rule tables: For each (state, color) pair, we need transition:
+  // { newColor, turn (left/right), newState }
+  // We'll generate a random rule set of size S * C.
+  let ruleTable = []; // array of {newColor, turn, newState}
+  function makeRandomRule() {
+    ruleTable = [];
+    for(let st=0; st<S; st++) {
+      for(let col=0; col<C; col++) {
+        const newColor = Math.floor(Math.random() * C);
+        const turn = Math.random() < 0.5 ? -1 : 1; // -1 = left, +1 = right
+        const newState = Math.floor(Math.random() * S);
+        ruleTable.push({newColor, turn, newState});
+      }
+    }
+  }
+
+  function buildPalette() {
+    let set;
+    if(params.colorMode===0) set = [0,'#000000','#00ffff'];
+    else if(params.colorMode===1) set = [0,'#000000','#ff00ff'];
+    else if(params.colorMode===2) set = [0,'#000000','#ff0000','#00ff00','#0000ff'];
+    else set = [0,'#000000','#ffff00','#ff8000','#ff0000'];
+    // Ensure we have C colors (index 0 is background black)
+    while(set.length < C+1) {
+      // generate some neon colors using HSL
+      const hue = Math.floor(Math.random()*360);
+      set.push(`hsl(${hue},100%,60%)`);
+    }
+    // Convert to RGB strings for canvas
+    palette = set.map(c => {
+      if(c===0) return 'rgb(0,0,0)';
+      // if it's hsl string, convert; but easier: just use context to parse? but we can just keep hsl and use fillStyle directly? We'll need to parse for ImageData. Simpler: use a temporary element or our own converter.
+      // For simplicity, we'll just use the color strings directly when drawing shapes, not for ImageData. For rendering grid cells, we can use global fillStyle per color index.
+      return c;
+    });
+  }
+
+  function init() {
+    const N = gridW * gridH;
+    grid = new Uint8Array(N);
+    // All cells color 0 (background)
+    // Rebuild palette
+    buildPalette();
+    makeRandomRule();
+    resetTurmite();
+  }
+
+  function resetTurmite() {
+    turmite = {
+      x: Math.floor(gridW/2),
+      y: Math.floor(gridH/2),
+      dir: 0, // up
+      state: 1, // start in state 1 (since state 0 often means "erase"? we'll just random)
+      steps: 0,
+    };
+    stepsAccum = 0;
+  }
+
+  // Get cell color index
+  function getColor(x,y) {
+    const idx = (y*gridW + x) % (gridW*gridH); // use mod for safety
+    return grid[idx] & ColorMask;
+  }
+
+  function setColor(x,y, c) {
+    const idx = (y*gridW + x) % (gridW*gridH);
+    // keep wall bit
+    const wall = grid[idx] & WallBit;
+    grid[idx] = wall | (c & ColorMask);
+  }
+
+  function isWall(x,y) {
+    const idx = (y*gridW + x) % (gridW*gridH);
+    return (grid[idx] & WallBit) !== 0;
+  }
+
+  function setWall(x,y, isWall) {
+    const idx = (y*gridW + x) % (gridW*gridH);
+    if(isWall) grid[idx] |= WallBit; else grid[idx] &= ~WallBit;
+  }
+
+  function stepTurmite() {
+    if(!turmite) return;
+    const {x,y,dir,state} = turmite;
+    // Current cell color
+    const col = getColor(x,y);
+    // Access rule: index = state * C + col
+    const ruleIndex = state * C + col;
+    const rule = ruleTable[ruleIndex];
+    // Apply color change
+    setColor(x,y, rule.newColor);
+    // Turn
+    let newDir = (dir + rule.turn + 4) % 4;
+    // Move
+    let nx = (x + dirs[newDir][0] + gridW) % gridW;
+    let ny = (y + dirs[newDir][1] + gridH) % gridH;
+    // Check wall: if wall, turn around (reverse direction) and don't move? Could also die. We'll bounce: reverse direction.
+    if(isWall(nx,ny)) {
+      newDir = (newDir + 2) % 4; // reverse
+      nx = (x + dirs[newDir][0] + gridW) % gridW;
+      ny = (y + dirs[newDir][1] + gridH) % gridH;
+      // If still wall, mark as wall? We'll just skip move this turn.
+      if(isWall(nx,ny)) {
+        nx = x; ny = y;
+      }
+    }
+    // New state
+    const newState = rule.newState;
+    // Update turmite
+    turmite.x = nx;
+    turmite.y = ny;
+    turmite.dir = newDir;
+    turmite.state = newState;
+    turmite.steps++;
+  }
+
+  // Drawing
+  function draw() {
+    // Fade out trail by darkening entire grid a bit? We'll use a different approach:
+    // Instead of clearing, we'll draw the grid as solid colors. To get trails, we can store a step count per cell and fade based on recency.
+    // For simplicity, no trail effect yet; trail param could control opacity of drawing? Actually we can simulate trail by drawing grid with alpha based on step age. We'll store step number when cell was changed.
+  }
+
+  // Better: maintain a step-last-update per cell. On each frame, we compute alpha = max(0, 1 - (currentStep - lastStep)/params.trail). However that could be heavy. Simpler: just draw fresh each frame; trail effect can be achieved by not clearing fully but drawing a translucent rectangle over the whole canvas to fade old content. But our grid is on a small offscreen canvas we redraw. Not efficient with trails.
+  // Let's change approach: render grid to an offscreen buffer (imageData) each frame. We'll also maintain a "last update" step counter for each cell to support fading.
+  // We'll keep an array lastStep of Uint32 (or Uint16) same length as grid.
+  let lastStep; // Uint32Array same size as grid
+  let totalStepsCounter = 0;
+
+  function initGrid() {
+    const N = gridW * gridH;
+    grid = new Uint8Array(N);
+    lastStep = new Uint32Array(N);
+    totalStepsCounter = 0;
+    buildPalette();
+    makeRandomRule();
+    resetTurmite();
+  }
+
+  // On resize, reallocate and preserve? For simplicity, reinit.
+  resize = () => {
+    W=canvas.width=innerWidth; H=canvas.height=innerHeight;
+    initGrid();
+  };
+
+  function update(dt) {
+    if(params.stepDelay <= 0) {
+      // run as many steps as needed
+      const maxSteps = Math.ceil(60 * dt) + 1;
+      for(let i=0; i<maxSteps; i++) stepTurmite();
+    } else {
+      // use delay accumulator
+      stepsAccum += dt * 1000;
+      while(stepsAccum >= params.stepDelay) {
+        stepTurmite();
+        stepsAccum -= params.stepDelay;
+      }
+    }
+  }
+
+  function draw() {
+    // Draw grid onto an offscreen canvas and scale
+    // For each cell, determine color and possibly alpha based on age if trail>0
+    // To avoid per-pixel loops in JS for large grid, we can use ImageData and set via array.
+    // We'll compute RGB for each cell based on its color index.
+    // If trail > 0, we can compute fade factor = Math.exp(-(totalStepsCounter - lastStep[idx]) / params.trail) but that's heavy.
+    // Instead, we can render directly to main context without offscreen: draw small rectangles (fillRect) for each cell - that's too many draw calls.
+    // Best: use ImageData. We'll compute one byte per cell: color index. Then map to palette using a 256-entry lookup? Actually we can create an 8-bit palette via createImageData with a color table? Canvas doesn't support indexed color directly; we have to expand to RGBA.
+    // We'll compute an ImageData of size (gridW, gridH) and then scale to canvas.
+    // For speed, we'll use a precomputed RGBA palette typed array: paletteRGBA = Uint32Array where each entry is 0xAARRGGBB in little-endian? We can set directly into ImageData.data which is Uint8ClampedArray.
+    // We'll create a Uint32Array view over the ImageData buffer for faster assignment if we want.
+    // But simpler: loop over cells and compute RGBA values using precomputed rgb for each color index. Also incorporate fade if trail>0.
+    // Let's precompute rgb values for each color index as [r,g,b].
+    // For trail, we can compute brightness factor: if (totalStepsCounter - lastStep[idx] < trail) then factor = 1 else 0; we could also have a smooth fade based on difference. We'll do simple: if age < trail then fully bright else dimmed to maybe 10%? But trail param as "trail length" suggests how many steps the trail persists. So we can use a circular buffer of recent cell changes? Might be simpler: just not implement trail for now; but it's a control so I should implement something.
+    // Alternatively, we can store a list of recently changed cells and draw them with a persistent highlight that fades over time. But easier: just draw the entire grid as is; the "trail" slider could control the opacity of the turmite's current position? Actually the description says "Trail length". Could be the length of the trail left behind as the turmite moves? In classic Langton's ant, the ant leaves a trail that changes color as it steps. The trail is the grid itself! The whole grid is the trail. So trail length doesn't quite apply. But the UI includes a "Trail length" slider. Maybe it means how many steps to remember? Or perhaps it's for a fading effect: older cells fade to black over time, making a moving trail. That would be similar to "Neon Automaton" but for turmites. That could be a nice effect.
+    // Let's implement fading: maintain a grid of "age" (steps since last update). Each cell's age increments each step. When turmite visits, set age=0. Then when rendering, color intensity = max(0, 1 - age / trailLength). If trailLength=0, show all cells at full brightness.
+    // We can maintain age array of Uint16.
+    let age; // same size, increments each step globally? Actually each step we could increment all ages? That's O(N) per step - too heavy for large grid (gridW*gridH maybe ~50k). But steps per second may be limited to 30-120, grid up to maybe 200x150=30k cells. 30k * 120 = 3.6M ops per second, that's okay in JS? Possibly okay but could be heavy. Better: we compute age = totalStepsCounter - lastStep[idx]. That's a simple subtraction per cell during render; O(N) per frame but that's fine (30k per frame at 60fps = 1.8M ops). Acceptable.
+    // We'll compute integer age and then alpha = age < trail ? 1 : 0 for binary; or smooth: alpha = Math.max(0, 1 - age/trail).
+    // I'll do smooth fade using precomputed lookup? We can compute factor = 1 - Math.min(1, age/trail). age is up to maybe thousands; Math.min and division are okay.
+    // To optimize, we can precompute a 256-entry fade table for ages 0-255 but trail may be up to 200, so it's okay.
+    // Let's implement: during render, for each cell idx, compute age = totalStepsCounter - lastStep[idx]; if trail>0 then alpha = 1 - Math.min(1, age/params.trail); else alpha = (cell has nonzero color? Actually if color index non-zero, show full. But note: even color 0 is background black - we might not render it. So we render non-zero colors only.
+    // We'll need to store lastStep as Uint32 (or Uint16, but steps could be high; 32-bit safe).
+    // So init: lastStep.fill(0), and when a cell's color is updated, set lastStep[idx] = totalStepsCounter.
+  }
+
+  // Actually, we haven't defined lastStep yet. Let's update initGrid to allocate lastStep.
+  // I'll rewrite the initialization clearly.
+</script>
+</body>
+</html>

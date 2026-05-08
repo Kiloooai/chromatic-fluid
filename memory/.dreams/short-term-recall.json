@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "updatedAt": "2026-05-08T14:01:25.539Z",
+  "entries": {
+    "memory:memory/2026-04-28.md:1:13": {
+      "key": "memory:memory/2026-04-28.md:1:13",
+      "path": "memory/2026-04-28.md",
+      "startLine": 1,
+      "endLine": 13,
+      "source": "memory",
+      "snippet": "# 2026-04-28 ## Build Cycle **14:00 - Heartbeat Build Triggered** - Project: Zen Rock Garden (Type 3 interactive browser toy) - Repo: https://github.com/Kiloooai/zen-rock-garden - Features: Canvas-based gravel raking simulation, draggable rocks, zen quote system, procedural texture, touch-friendly - Vibe: Calming, interactive meditation toy — not a productivity tool - Status: ✅ Completed and pushed > \"Rake the gravel. Arrange the stones. Listen.\"",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "groundedCount": 0,
+      "totalScore": 0.6337749871801168,
+      "maxScore": 0.6337749871801168,
+      "firstRecalledAt": "2026-05-08T14:01:25.539Z",
+      "lastRecalledAt": "2026-05-08T14:01:25.539Z",
+      "queryHashes": [
+        "e9db0c6c2980"
+      ],
+      "recallDays": [
+        "2026-05-08"
+      ],
+      "conceptTags": [
+        "canvas-based",
+        "touch-friendly",
+        "cycle",
+        "heartbeat",
+        "triggered",
+        "project",
+        "zen",
+        "rock"
+      ]
+    }
+  }
+}

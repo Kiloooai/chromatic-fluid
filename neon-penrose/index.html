@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Neon Penrose</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  overflow:hidden; background:#000; font-family:'Courier New',monospace; color:#f0f;
+  text-shadow:0 0 5px #f0f; cursor:grab;
+}
+canvas{ display:block; }
+.controls{
+  position:absolute; top:20px; left:20px; background:rgba(0,0,0,0.7);
+  padding:12px; border-radius:8px; border:1px solid rgba(255,0,255,0.3);
+  backdrop-filter:blur(4px); z-index:100; user-select:none; width:200px; font-size:12px;
+}
+h2{ margin-bottom:8px; color:#0ff; text-shadow:0 0 8px #0ff; font-size:14px; }
+.control-group{ margin-bottom:8px; }
+label{ display:block; font-size:10px; color:#ff0; margin-bottom:3px; }
+.value-display{ float:right; color:#fff; font-weight:bold; }
+input[type=range]{ width:100%; accent-color:#f0f; }
+.buttons{ display:flex; gap:6px; margin-top:8px; }
+button{
+  flex:1; padding:6px; background:transparent; border:1px solid #0ff; color:#0ff;
+  border-radius:4px; cursor:pointer; font-family:inherit; font-size:10px;
+}
+button:hover{ background:rgba(0,255,255,0.1); }
+.stats{
+  position:absolute; top:20px; right:20px; color:#0f0;
+  text-shadow:0 0 8px #0f0; font-size:12px; background:rgba(0,0,0,0.7);
+  padding:8px; border-radius:6px; border:1px solid rgba(0,255,0,0.3);
+}
+.instructions{
+  position:absolute; bottom:12px; left:50%; transform:translateX(-50%);
+  color:#888; font-size:11px; text-align:center; max-width:500px; pointer-events:none;
+}
+</style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<div class="controls">
+<h2>◎ NEON PENROSE</h2>
+<div class="control-group">
+<label>Rot Speed <span class="value-display" id="rotSpdVal">0.5</span></label>
+<input type="range" id="rotSpeed" min="0" max="2.0" step="0.05" value="0.5">
+</div>
+<div class="control-group">
+<label>Glow (px) <span class="value-display" id="glowVal">6</span></label>
+<input type="range" id="glow" min="0" max="20" value="6">
+</div>
+<div class="control-group">
+<label>Color Speed <span class="value-display" id="colorSpdVal">0.2</span></label>
+<input type="range" id="colorSpeed" min="0" max="1.0" step="0.05" value="0.2">
+</div>
+<div class="control-group">
+<label>Tilt X <span class="value-display" id="tiltXVal">30</span></label>
+<input type="range" id="tiltX" min="0" max="90" value="30">
+</div>
+<div class="control-group">
+<label>Tilt Y <span class="value-display" id="tiltYVal">20</span></label>
+<input type="range" id="tiltY" min="0" max="90" value="20">
+</div>
+<div class="control-group">
+<label>Vertex Size <span class="value-display" id="vertSizeVal">4</span></label>
+<input type="range" id="vertSize" min="1" max="10" value="4">
+</div>
+<div class="buttons">
+<button id="pauseBtn">Pause</button>
+<button id="flipBtn">Flip Parity</button>
+</div>
+</div>
+
+<div class="stats">
+<div>Hue: <span id="hueVal">0</span>°</div>
+<div>FPS: <span id="fps">60</span></div>
+</div>
+
+<div class="instructions">
+Impossible Penrose triangle wireframe. Drag to rotate. Adjust tilt to see the illusion.
+</div>
+
+<script>
+const canvas=document.getElementById('canvas'); const ctx=canvas.getContext('2d');
+const rotSpdSlider=document.getElementById('rotSpeed'); const glowSlider=document.getElementById('glow');
+const colorSpdSlider=document.getElementById('colorSpeed'); const tiltXSlider=document.getElementById('tiltX');
+const tiltYSlider=document.getElementById('tiltY'); const vertSizeSlider=document.getElementById('vertSize');
+const pauseBtn=document.getElementById('pauseBtn'); const flipBtn=document.getElementById('flipBtn');
+const hueEl=document.getElementById('hueVal'); const fpsEl=document.getElementById('fps');
+
+function updateDisplays(){
+  document.getElementById('rotSpdVal').textContent=rotSpdSlider.value;
+  document.getElementById('glowVal').textContent=glowSlider.value;
+  document.getElementById('colorSpdVal').textContent=colorSpdSlider.value;
+  document.getElementById('tiltXVal').textContent=tiltXSlider.value;
+  document.getElementById('tiltYVal').textContent=tiltYSlider.value;
+  document.getElementById('vertSizeVal').textContent=vertSizeSlider.value;
+}
+[rotSpdSlider,glowSlider,colorSpdSlider,tiltXSlider,tiltYSlider,vertSizeSlider].forEach(e=>e.addEventListener('input',updateDisplays));
+
+let width,height; let running=true; let lastTime=0; let frameCount=0; let lastFpsTime=0; let hueCycle=0;
+let isDragging=false; let lastMouseX=0, lastMouseY=0; let rotX=0, rotY=0;
+let parity=1; // 1 or -1: determines which edges are "front"
+
+function resize(){ width=canvas.width=window.innerWidth; height=canvas.height=window.innerHeight; }
+window.addEventListener('resize',resize); resize();
+
+canvas.addEventListener('mousedown',e=>{ isDragging=true; lastMouseX=e.clientX; lastMouseY=e.clientY; });
+canvas.addEventListener('mousemove',e=>{
+  if(isDragging){
+    rotY += (e.clientX - lastMouseX)*0.005;
+    rotX += (e.clientY - lastMouseY)*0.005;
+    lastMouseX=e.clientX; lastMouseY=e.clientY;
+  }
+});
+canvas.addEventListener('mouseup',()=>isDragging=false); canvas.addEventListener('mouseleave',()=>isDragging=false);
+canvas.addEventListener('touchstart',e=>{ isDragging=true; lastMouseX=e.touches[0].clientX; lastMouseY=e.touches[0].clientY; });
+canvas.addEventListener('touchmove',e=>{
+  if(isDragging){
+    rotY += (e.touches[0].clientX - lastMouseX)*0.005;
+    rotX += (e.touches[0].clientY - lastMouseY)*0.005;
+    lastMouseX=e.touches[0].clientX; lastMouseY=e.touches[0].clientY;
+  }
+});
+canvas.addEventListener('touchend',()=>isDragging=false);
+
+pauseBtn.addEventListener('click',()=>{ running=!running; pauseBtn.textContent=running?'Pause':'Resume'; });
+flipBtn.addEventListener('click',()=>{ parity *= -1; });
+
+// Penrose triangle vertices in 3D (side length √3 for convenience)
+const s = 120;  // side length
+const vertices = [
+  {x: -s, y: -s/2, z: -s/2},   // vertex A
+  {x: 0,  y: s,     z:  s/2},   // vertex B
+  {x: s,  y: -s/2,  z: -s/2}    // vertex C
+];
+// The Penrose triangle consists of three edges: A->B, B->C, C->A
+// The illusion requires careful hidden-line removal and diagonal "bridges"
+// We'll draw three orthogonal-looking bars along the edges, each with square cross-section
+// Key trick: each edge is "broken" to allow the impossible connections to appear continuous
+
+function project(v, tiltX, tiltY){
+  // Apply rotations
+  let {x,y,z} = v;
+  // Rotate X
+  let cosX=Math.cos(rotX+tiltX*Math.PI/180), sinX=Math.sin(rotX+tiltX*Math.PI/180);
+  let y1 = y*cosX - z*sinX;
+  let z1 = y*sinX + z*cosX;
+  // Rotate Y
+  let cosY=Math.cos(rotY+tiltY*Math.PI/180), sinY=Math.sin(rotY+tiltY*Math.PI/180);
+  let x2 = x*cosY + z1*sinY;
+  let z2 = -x*sinY + z1*cosY;
+  // Perspective
+  const fov = 600;
+  const camZ = 450;
+  const scale = fov / (camZ - z2);
+  return {x: width/2 + x2*scale, y: height/2 + y1*scale, scale: scale, z: z2};
+}
+
+function drawBar(p1, p2, hue, parity){
+  // Compute bar center and endpoints in 3D
+  // Treat edge as a thick bar with square cross-section
+  const thickness = 30; // bar width
+  // Direction vector
+  const dx = p2.x - p1.x, dy = p2.y - p1.y, dz = p2.z - p1.z;
+  const len = Math.sqrt(dx*dx+dy*dy+dz*dz);
+  // Perpendicular vectors for bar cross-section
+  // Use an arbitrary perpendicular; pick world up as reference if not aligned
+  let ux=0, uy=1, uz=0; // up
+  // Cross product of dir and up gives right
+  let rx = dy*uz - dz*uy;
+  let ry = dz*ux - dx*uz;
+  let rz = dx*uy - dy*ux;
+  const rlen = Math.sqrt(rx*rx+ry*ry+rz*rz);
+  if(rlen>0){ rx/=rlen; ry/=rlen; rz/=rlen; }
+  // Cross dir and right gives up2 (actual up for bar)
+  let ux2 = ry*dz - rz*dy;
+  let uy2 = rz*dx - rx*dz;
+  let uz2 = rx*dy - ry*dx;
+  const ulen = Math.sqrt(ux2*ux2+uy2*uy2+uz2*uz2);
+  if(ulen>0){ ux2/=ulen; uy2/=ulen; uz2/=ulen; }
+
+  // Four corners along the bar: endpoints ± half-thickness orthogonal directions
+  const half = thickness/2;
+  // Corners: (p1 + u*half + r*half), (p1 + u*half - r*half), (p1 - u*half + r*half), (p1 - u*half - r*half)
+  // Similarly for p2
+  const corners1 = [
+    {x:p1.x + ux2*half + rx*half, y:p1.y + uy2*half + ry*half, z:p1.z + uz2*half + rz*half},
+    {x:p1.x + ux2*half - rx*half, y:p1.y + uy2*half - ry*half, z:p1.z + uz2*half - rz*half},
+    {x:p1.x - ux2*half + rx*half, y:p1.y - uy2*half + ry*half, z:p1.z - uz2*half + rz*half},
+    {x:p1.x - ux2*half - rx*half, y:p1.y - uy2*half - ry*half, z:p1.z - uz2*half - rz*half},
+  ];
+  const corners2 = [
+    {x:p2.x + ux2*half + rx*half, y:p2.y + uy2*half + ry*half, z:p2.z + uz2*half + rz*half},
+    {x:p2.x + ux2*half - rx*half, y:p2.y + uy2*half - ry*half, z:p2.z + uz2*half - rz*half},
+    {x:p2.x - ux2*half + rx*half, y:p2.y - uy2*half + ry*half, z:p2.z - uz2*half + rz*half},
+    {x:p2.x - ux2*half - rx*half, y:p2.y - uy2*half - ry*half, z:p2.z - uz2*half - rz*half},
+  ];
+
+  // Project corners
+  const tiltX=parseFloat(tiltXSlider.value)*Math.PI/180;
+  const tiltY=parseFloat(tiltYSlider.value)*Math.PI/180;
+  const proj1 = corners1.map(v=>project(v, tiltX, tiltY));
+  const proj2 = corners2.map(v=>project(v, tiltX, tiltY));
+
+  // Draw quads: two quads connecting the sides, plus end caps
+  ctx.strokeStyle=`hsl(${hue},100%,60%)`; ctx.lineWidth=2;
+  ctx.shadowColor=`hsl(${hue},100%,60%)`; ctx.shadowBlur=parseFloat(glowSlider.value);
+  // Side faces: connect corresponding corners
+  for(let i=0;i<4;i++){
+    const j = (i+1)%4;
+    ctx.beginPath(); ctx.moveTo(proj1[i].x, proj1[i].y); ctx.lineTo(proj2[i].x, proj2[i].y); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(proj1[i].x, proj1[i].y); ctx.lineTo(proj1[j].x, proj1[j].y); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(proj2[i].x, proj2[i].y); ctx.lineTo(proj2[j].x, proj2[j].y); ctx.stroke();
+  }
+  ctx.shadowBlur=0;
+}
+
+function drawVertices(hue){
+  const tiltX=parseFloat(tiltXSlider.value)*Math.PI/180;
+  const tiltY=parseFloat(tiltYSlider.value)*Math.PI/180;
+  const radius = parseFloat(vertSizeSlider.value);
+  vertices.forEach(v=>{
+    const p=project(v, tiltX, tiltY);
+    ctx.beginPath(); ctx.arc(p.x, p.y, radius, 0, Math.PI*2);
+    ctx.fillStyle=`hsl(${hue},100%,70%)`; ctx.shadowColor=`hsl(${hue},100%,70%)`; ctx.shadowBlur=10;
+    ctx.fill(); ctx.shadowBlur=0;
+  });
+}
+
+function drawTriangle(hue){
+  const tiltX=parseFloat(tiltXSlider.value)*Math.PI/180;
+  const tiltY=parseFloat(tiltYSlider.value)*Math.PI/180;
+  // The three edges are: 0->1, 1->2, 2->0
+  // With parity we can hide some edges to create the illusion
+  drawBar(vertices[0], vertices[1], hue, parity);
+  drawBar(vertices[1], vertices[2], hue, parity);
+  drawBar(vertices[2], vertices[0], hue, parity);
+  drawVertices(hue);
+}
+
+function animate(timestamp){
+  const delta=timestamp-lastTime||16; lastTime=timestamp;
+  frameCount++;
+  if(timestamp-lastFpsTime>=1000){ fpsEl.textContent=frameCount; frameCount=0; lastFpsTime=timestamp; }
+  if(running){
+    hueCycle = (hueCycle + parseFloat(colorSpdSlider.value)*delta*0.01) % 360;
+    hueEl.textContent = Math.round(hueCycle);
+    ctx.fillStyle='rgba(0,0,0,0.2)'; ctx.fillRect(0,0,width,height);
+    rotY += parseFloat(rotSpdSlider.value)*delta*0.0005;
+    drawTriangle(hueCycle);
+  }
+  requestAnimationFrame(animate);
+}
+
+updateDisplays(); animate(0);
+</script>
+</body>
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Neon Lightning</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  overflow:hidden; background:#000; font-family:'Courier New',monospace; color:#f0f;
+  text-shadow:0 0 5px #f0f; cursor:crosshair;
+}
+canvas{ display:block; }
+.controls{
+  position:absolute; top:20px; left:20px; background:rgba(0,0,0,0.7);
+  padding:12px; border-radius:8px; border:1px solid rgba(255,0,255,0.3);
+  backdrop-filter:blur(4px); z-index:100; user-select:none; width:200px; font-size:12px;
+}
+h2{ margin-bottom:8px; color:#0ff; text-shadow:0 0 8px #0ff; font-size:14px; }
+.control-group{ margin-bottom:8px; }
+label{ display:block; font-size:10px; color:#ff0; margin-bottom:3px; }
+.value-display{ float:right; color:#fff; font-weight:bold; }
+input[type=range]{ width:100%; accent-color:#f0f; }
+select{
+  width:100%; padding:4px; background:#111; color:#f0f; border:1px solid #f0f;
+  border-radius:4px; font-family:inherit; font-size:11px;
+}
+.buttons{ display:flex; gap:6px; margin-top:8px; }
+button{
+  flex:1; padding:6px; background:transparent; border:1px solid #0ff; color:#0ff;
+  border-radius:4px; cursor:pointer; font-family:inherit; font-size:10px;
+}
+button:hover{ background:rgba(0,255,255,0.1); }
+.stats{
+  position:absolute; top:20px; right:20px; color:#0f0;
+  text-shadow:0 0 8px #0f0; font-size:12px; background:rgba(0,0,0,0.7);
+  padding:8px; border-radius:6px; border:1px solid rgba(0,255,0,0.3);
+}
+.instructions{
+  position:absolute; bottom:12px; left:50%; transform:translateX(-50%);
+  color:#888; font-size:11px; text-align:center; max-width:500px; pointer-events:none;
+}
+</style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<div class="controls">
+<h2>◎ NEON LIGHTNING</h2>
+<div class="control-group">
+<label>Glow (px) <span class="value-display" id="glowVal">8</span></label>
+<input type="range" id="glow" min="0" max="30" value="8">
+</div>
+<div class="control-group">
+<label>Branch Chance <span class="value-display" id="branchVal">0.3</span></label>
+<input type="range" id="branchChance" min="0" max="0.8" step="0.05" value="0.3">
+</div>
+<div class="control-group">
+<label>Iterations <span class="value-display" id="itersVal">5</span></label>
+<input type="range" id="iters" min="2" max="7" value="5">
+</div>
+<div class="control-group">
+<label>Color Mode</label>
+<select id="colorMode">
+  <option value="blue-white">Blue-White</option>
+  <option value="cyan">Cyan</option>
+  <option value="magenta">Magenta</option>
+  <option value="fire">Fire</option>
+  <option value="rainbow">Rainbow</option>
+</select>
+</div>
+<div class="control-group">
+<label>Auto Storm <span class="value-display" id="autoVal">0</span></label>
+<input type="range" id="autoStorm" min="0" max="10" value="0" title="0=off, >0 = bolts per second approx">
+</div>
+<div class="buttons">
+<button id="pauseBtn">Pause</button>
+<button id="clearBtn">Clear</button>
+</div>
+</div>
+
+<div class="stats">
+<div>Bolts: <span id="boltCount">0</span></div>
+<div>FPS: <span id="fps">60</span></div>
+</div>
+
+<div class="instructions">
+Click to strike lightning at that point. Drag to create multiple bolts. Adjust glow, branching, iterations.
+</div>
+
+<script>
+const canvas=document.getElementById('canvas'); const ctx=canvas.getContext('2d');
+const glowSlider=document.getElementById('glow'); const branchSlider=document.getElementById('branchChance');
+const itersSlider=document.getElementById('iters'); const colorSel=document.getElementById('colorMode');
+const autoSlider=document.getElementById('autoStorm'); const pauseBtn=document.getElementById('pauseBtn'); const clearBtn=document.getElementById('clearBtn');
+const boltEl=document.getElementById('boltCount'); const fpsEl=document.getElementById('fps');
+
+function updateDisplays(){
+  document.getElementById('glowVal').textContent=glowSlider.value;
+  document.getElementById('branchVal').textContent=branchSlider.value;
+  document.getElementById('itersVal').textContent=itersSlider.value;
+  document.getElementById('autoVal').textContent=autoSlider.value;
+}
+[glowSlider,branchSlider,itersSlider,autoSlider].forEach(e=>e.addEventListener('input',updateDisplays));
+
+let width,height; let running=true; let lastTime=0; let frameCount=0; let lastFpsTime=0;
+let bolts=[]; // each bolt is array of {x,y} plus branches as subarrays? We'll store as {main: points[], branches: [{points:[]}]}
+let autoInterval=0; let lastAutoTime=0;
+
+function resize(){ width=canvas.width=window.innerWidth; height=canvas.height=window.innerHeight; }
+window.addEventListener('resize',resize); resize();
+
+canvas.addEventListener('mousedown', e => {
+  createBolt(e.clientX, e.clientY);
+});
+canvas.addEventListener('touchstart', e => {
+  createBolt(e.touches[0].clientX, e.touches[0].clientY);
+});
+
+pauseBtn.addEventListener('click',()=>{ running=!running; pauseBtn.textContent=running?'Pause':'Resume'; });
+clearBtn.addEventListener('click',()=>{ bolts=[]; boltEl.textContent=0; });
+
+// Bolt generation: recursive midpoint displacement
+class Bolt {
+  constructor(x0, y0, x1, y1, iterations, displacement, branchProb) {
+    this.main = this.generatePath(x0, y0, x1, y1, iterations, displacement);
+    this.branches = [];
+    // generate branches at random points along main (excluding near endpoints)
+    for (let i = 1; i < this.main.length - 1; i++) {
+      if (Math.random() < branchProb) {
+        const p = this.main[i];
+        // random direction roughly perpendicular to main direction
+        const angle = Math.atan2(y1 - y0, x1 - x0) + (Math.random() - 0.5) * Math.PI;
+        const length = 30 + Math.random() * 60;
+        const x2 = p.x + Math.cos(angle) * length;
+        const y2 = p.y + Math.sin(angle) * length;
+        // reduce iterations and displacement for branches
+        this.branches.push(this.generatePath(p.x, p.y, x2, y2, Math.max(1, iterations - 2), displacement * 0.6));
+      }
+    }
+  }
+
+  generatePath(x0, y0, x1, y1, iterations, displacement) {
+    // start with two endpoints
+    let points = [{x: x0, y: y0}, {x: x1, y: y1}];
+    for (let it = 0; it < iterations; it++) {
+      const newPoints = [];
+      for (let i = 0; i < points.length - 1; i++) {
+        const p0 = points[i];
+        const p1 = points[i+1];
+        const mid = {
+          x: (p0.x + p1.x) / 2,
+          y: (p0.y + p1.y) / 2
+        };
+        // perpendicular vector
+        const dx = p1.x - p0.x;
+        const dy = p1.y - p0.y;
+        const len = Math.sqrt(dx*dx + dy*dy) || 1;
+        const perpX = -dy / len;
+        const perpY = dx / len;
+        const offset = (Math.random() - 0.5) * displacement;
+        mid.x += perpX * offset;
+        mid.y += perpY * offset;
+        newPoints.push(p0);
+        newPoints.push(mid);
+      }
+      newPoints.push(points[points.length-1]);
+      points = newPoints;
+      displacement *= 0.5;
+    }
+    return points;
+  }
+}
+
+function createBolt(tx, ty) {
+  // source: top edge, x near center with jitter
+  const srcX = width/2 + (Math.random() - 0.5) * 100;
+  const srcY = -20;
+  const iterations = parseInt(itersSlider.value);
+  const displacement = 80; // initial displacement amplitude
+  const branchProb = parseFloat(branchSlider.value);
+  bolts.push(new Bolt(srcX, srcY, tx, ty, iterations, displacement, branchProb));
+  boltEl.textContent = bolts.length;
+  // flash effect
+  ctx.fillStyle = 'rgba(255,255,255,0.8)';
+  ctx.fillRect(0,0,width,height);
+}
+
+function drawBolt(bolt, hue) {
+  const glow = parseInt(glowSlider.value);
+  const colorMode = colorSel.value;
+  // Determine stroke style
+  let strokeColor;
+  if (colorMode === 'blue-white') strokeColor = `hsl(${200 + Math.random()*20},100%,80%)`;
+  else if (colorMode === 'cyan') strokeColor = '#0ff';
+  else if (colorMode === 'magenta') strokeColor = '#f0f';
+  else if (colorMode === 'fire') strokeColor = `hsl(${20 + Math.random()*40},100%,70%)`;
+  else if (colorMode === 'rainbow') strokeColor = `hsl(${(hue + Math.random()*60)%360},100%,70%)`;
+
+  ctx.strokeStyle = strokeColor;
+  ctx.lineWidth = 2;
+  ctx.shadowColor = strokeColor;
+  ctx.shadowBlur = glow;
+
+  // Draw main
+  ctx.beginPath();
+  const main = bolt.main;
+  ctx.moveTo(main[0].x, main[0].y);
+  for (let i = 1; i < main.length; i++) ctx.lineTo(main[i].x, main[i].y);
+  ctx.stroke();
+
+  // Draw branches
+  for (let b of bolt.branches) {
+    ctx.beginPath();
+    ctx.moveTo(b[0].x, b[0].y);
+    for (let i = 1; i < b.length; i++) ctx.lineTo(b[i].x, b[i].y);
+    ctx.stroke();
+  }
+  ctx.shadowBlur = 0;
+}
+
+let hueCycle = 0;
+
+function animate(timestamp){
+  const delta = timestamp - lastTime || 16; lastTime = timestamp;
+  frameCount++;
+  if(timestamp - lastFpsTime >= 1000){
+    fpsEl.textContent = frameCount; frameCount = 0; lastFpsTime = timestamp;
+  }
+  if(running){
+    // slowly fade background to black but not fully clear; we want flashes to fade
+    ctx.fillStyle='rgba(0,0,0,0.2)'; ctx.fillRect(0,0,width,height);
+    hueCycle = (hueCycle + 0.1 * delta) % 360;
+    // Auto storm?
+    const autoRate = parseInt(autoSlider.value);
+    if(autoRate > 0){
+      const interval = 1000 / autoRate;
+      if(timestamp - lastAutoTime > interval){
+        createBolt(Math.random()*width, height - 50 - Math.random()*100);
+        lastAutoTime = timestamp;
+      }
+    }
+    // Draw bolts
+    for (let bolt of bolts) {
+      drawBolt(bolt, hueCycle);
+    }
+    // Limit bolt count to avoid slowdown
+    if(bolts.length > 100) bolts.splice(0, bolts.length - 100);
+  }
+  requestAnimationFrame(animate);
+}
+
+updateDisplays(); animate(0);
+</script>
+</body>
+</html>
