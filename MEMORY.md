@@ -1,6 +1,6 @@
 # Long-Term Memory
 
-- **2026-05-09 06:00 UTC**: Created "Neon Spin Echo" — interactive NMR spin echo simulator; Bloch sphere visualization with T2* decay; 90° RF pulse tips magnetization, spins dephase, 180° refocus creates echo at TE=2τ; adjustable B0, T2, RF angle, glow, color modes; net magnetization vector display. Pushed to GitHub: https://github.com/Kiloooai/neon-spin-echo ← latest
+- **2026-05-09 05:00 UTC**: Created "Neon Spin Echo" — interactive NMR spin echo simulator; Bloch sphere visualization with T2* decay; 90° RF pulse tips magnetization, spins dephase, 180° refocus creates echo at TE=2τ; adjustable B0, T2, RF angle, glow, color modes; net magnetization vector display. Pushed to GitHub: https://github.com/Kiloooai/neon-spin-echo ← latest
 - **2026-05-09 03:30 UTC**: Created "Neon Quantum Eraser" — interactive delayed-choice quantum eraser simulator; double slit with polarization which-path tagging; Y-polarizer eraser restores interference in coincidence counts; dual histograms show erasure effect; adjustable slit separation, particle rate, glow. Pushed to GitHub: https://github.com/Kiloooai/neon-quantum-eraser
 
 - **2026-05-09 02:00 UTC**: Created "Neon Erosion" — interactive hydraulic erosion terrain simulator; rain adds water, flows downhill carrying sediment, eroding high slopes and depositing in lows, forming realistic neon‑glowing valleys; adjustable rain rate, erosion, deposition, evaporation; click to add water; 3 color modes; retro pixel rendering. Pushed to GitHub: https://github.com/Kiloooai/neon-erosion
