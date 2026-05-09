@@ -1,6 +1,8 @@
 # Long-Term Memory
 
+- **2026-05-09 14:00 UTC**: Created "Neon Perspective" — interactive perspective grid visualizer; 1‑point and 2‑point perspective modes; adjustable horizon and vanishing points; grid lines converge to VPs; neon glow; color modes; toggles. Pushed to GitHub: https://github.com/Kiloooai/neon-perspective ← latest
 - **2026-05-09 09:30 UTC**: Created "Neon Relativity" — interactive special relativity visualizer; length contraction (moving rods shorten by 1/γ), time dilation (light clock runs slow), relativity of simultaneity; velocity slider β=v/c up to 0.99c; Lorentz‑transformed spacetime grid; neon glow; color modes; component toggles. Pushed to GitHub: https://github.com/Kiloooai/neon-relativity ← latest
+
 - **2026-05-09 08:00 UTC**: Created "Neon Bell's Inequality" — interactive CHSH Bell test visualizer; entangled photon polarizer correlations; classical hidden variables S≤2 vs quantum S≤2√2; entanglement slider mixes quantum/classical; live particle trails show Alice/Bob outcomes; compute S value in real time. Pushed to GitHub: https://github.com/Kiloooai/neon-bell ← latest
 
 - **2026-05-09 08:00 UTC**: Created "Neon Soliton" — interactive solitary wave (soliton) simulator; KdV‑like sech² pulses propagate without dispersion, collide and pass through; adjustable amplitude, width, speed, glow, color modes; add multiple solitons; neon filled shapes; pause/clear/reset. Pushed to GitHub: https://github.com/Kiloooai/neon-soliton ← latest
@@ -265,7 +267,9 @@ Type 3 browser toys (public repos):
 120. neon-spin-echo
 121. neon-soliton
 122. neon-bell
-123. neon-relativity ← latest
+123. neon-relativity
+124. neon-perspective ← latest
+
 
 
 
