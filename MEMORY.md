@@ -1,5 +1,6 @@
 # Long-Term Memory
 
+- **2026-05-09 21:30 UTC**: Created "Neon Fabry-Pérot" — interactive Fabry‑Pérot interferometer visualizer; multiple-beam interference between two partially reflective mirrors; sharp transmission fringes described by Airy function; adjustable cavity spacing d, mirror reflectivity R, wavelength λ; computes finesse, FSR, FWHM; neon glow; color modes; schematic diagram. Pushed to GitHub: https://github.com/Kiloooai/neon-fabry-perot ← latest
 - **2026-05-09 20:00 UTC**: Created "Neon Hologram" — interactive Gabor hologram visualizer; interference between reference plane wave and spherical object wave creates encoded fringe pattern; adjustable wavelength, object distance Z, lateral X/Y, reference tilt; animate object orbit; pixelated neon rendering (200×200 upscaled); glow; color modes. Pushed to GitHub: https://github.com/Kiloooai/neon-hologram ← latest
 - **2026-05-09 18:30 UTC**: Created "Neon Polarization" — interactive polarization simulator; Malus's law (intensity ∝ cos²(θ_inc−φ_pol)) with rotatable polarizer; Brewster angle mode shows p-polarized reflection vanishes at θ_B=arctan(n₂/n₁); adjustable incident angle, polarizer angle, index ratio; neon glow; color modes. Pushed to GitHub: https://github.com/Kiloooai/neon-polarization ← latest
 
@@ -280,7 +281,9 @@ Type 3 browser toys (public repos):
 125. neon-diffraction
 126. neon-interferometer
 127. neon-polarization
-128. neon-hologram ← latest
+128. neon-hologram
+129. neon-fabry-perot ← latest
+
 
 
 
