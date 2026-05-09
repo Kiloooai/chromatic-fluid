@@ -1,6 +1,8 @@
 # Long-Term Memory
 
+- **2026-05-09 20:00 UTC**: Created "Neon Hologram" — interactive Gabor hologram visualizer; interference between reference plane wave and spherical object wave creates encoded fringe pattern; adjustable wavelength, object distance Z, lateral X/Y, reference tilt; animate object orbit; pixelated neon rendering (200×200 upscaled); glow; color modes. Pushed to GitHub: https://github.com/Kiloooai/neon-hologram ← latest
 - **2026-05-09 18:30 UTC**: Created "Neon Polarization" — interactive polarization simulator; Malus's law (intensity ∝ cos²(θ_inc−φ_pol)) with rotatable polarizer; Brewster angle mode shows p-polarized reflection vanishes at θ_B=arctan(n₂/n₁); adjustable incident angle, polarizer angle, index ratio; neon glow; color modes. Pushed to GitHub: https://github.com/Kiloooai/neon-polarization ← latest
+
 - **2026-05-09 17:00 UTC**: Created "Neon Interferometer" — interactive Michelson interferometer visualizer; two-beam interference with variable path lengths; fringe shifts with ΔL; adjustable Arm A/Arm B lengths, wavelength, mismatch; neon glow; color modes; animate mismatch button. Pushed to GitHub: https://github.com/Kiloooai/neon-interferometer ← latest
 
 - **2026-05-09 15:30 UTC**: Created "Neon Diffraction" — interactive Huygens–Fresnel diffraction visualizer; wavelet summation across aperture; supports single-slit (sinc² envelope), double-slit, multi-slit (N=2–10), and edge (half-plane) diffraction; adjustable slit width/separation/N/λ/L; neon glow; color modes; real-time intensity plot. Pushed to GitHub: https://github.com/Kiloooai/neon-diffraction ← latest
@@ -277,7 +279,9 @@ Type 3 browser toys (public repos):
 124. neon-perspective
 125. neon-diffraction
 126. neon-interferometer
-127. neon-polarization ← latest
+127. neon-polarization
+128. neon-hologram ← latest
+
 
 
 
