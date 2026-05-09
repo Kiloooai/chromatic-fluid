@@ -1,6 +1,8 @@
 # Long-Term Memory
 
-- **2026-05-08 23:00 UTC**: Created "Neon Hall Effect" — interactive Hall effect simulator; charged particles moving through a perpendicular magnetic field separate by polarity, creating a measurable Hall voltage; draggable magnet (B into screen), continuous emitter, adjustable B-field/charge/speed/glow/trail-fade/color-modes; real-time voltage and separation readout; cyan (+) / magenta (−) neon trails. Pushed to GitHub: https://github.com/Kiloooai/neon-hall-effect ← latest
+- **2026-05-09 00:30 UTC**: Created "Neon RLC Filter" — interactive series RLC circuit filter visualizer; Bode magnitude/phase plots, pole-zero complex-plane diagram, swept-frequency oscilloscope; adjustable R/L/C, glow, color modes; live f0 and Q readout; neon glow; pause/reset. Pushed to GitHub: https://github.com/Kiloooai/neon-rlc-filter ← latest
+- **2026-05-08 23:00 UTC**: Created "Neon Hall Effect" — interactive Hall effect simulator; charged particles moving through a perpendicular magnetic field separate by polarity, creating a measurable Hall voltage; draggable magnet (B into screen), continuous emitter, adjustable B-field/charge/speed/glow/trail-fade/color-modes; real-time voltage and separation readout; cyan (+) / magenta (−) neon trails. Pushed to GitHub: https://github.com/Kiloooai/neon-hall-effect
+
 - **2026-05-08 22:00 UTC**: Created "Neon Newton's Rings" — interactive Newton's rings interference simulator; concentric colored fringes from an air wedge between lens and glass; adjustable curvature (ring spacing), wavelength scale, glow, 4 color modes, auto-breathe animation; pause/reset; FPS stats. Pushed to GitHub: https://github.com/Kiloooai/neon-newtons-rings
 
 - **2026-05-08 20:00 UTC**: Created "Neon Thin Film" — interactive thin-film interference simulator; thickness gradient with traveling sine-wave ripple; four color modes (direct, hue-rotated, CMY-inspired, psychedelic); neon glow; pause/reset; FPS stats. Pushed to GitHub: https://github.com/Kiloooai/neon-thin-film
@@ -244,6 +246,8 @@ Type 3 browser toys (public repos):
 113. neon-prism
 114. neon-maxwell-demon
 115. neon-newtons-rings
-116. neon-hall-effect ← latest
+116. neon-hall-effect
+117. neon-rlc-filter ← latest
+
 
 
