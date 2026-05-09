@@ -1,6 +1,8 @@
 # Long-Term Memory
 
+- **2026-05-09 17:00 UTC**: Created "Neon Interferometer" — interactive Michelson interferometer visualizer; two-beam interference with variable path lengths; fringe shifts with ΔL; adjustable Arm A/Arm B lengths, wavelength, mismatch; neon glow; color modes; animate mismatch button. Pushed to GitHub: https://github.com/Kiloooai/neon-interferometer ← latest
 - **2026-05-09 15:30 UTC**: Created "Neon Diffraction" — interactive Huygens–Fresnel diffraction visualizer; wavelet summation across aperture; supports single-slit (sinc² envelope), double-slit, multi-slit (N=2–10), and edge (half-plane) diffraction; adjustable slit width/separation/N/λ/L; neon glow; color modes; real-time intensity plot. Pushed to GitHub: https://github.com/Kiloooai/neon-diffraction ← latest
+
 - **2026-05-09 14:00 UTC**: Created "Neon Perspective" — interactive perspective grid visualizer; 1‑point and 2‑point perspective modes; adjustable horizon and vanishing points; grid lines converge to VPs; neon glow; color modes; toggles. Pushed to GitHub: https://github.com/Kiloooai/neon-perspective ← latest
 
 - **2026-05-09 09:30 UTC**: Created "Neon Relativity" — interactive special relativity visualizer; length contraction (moving rods shorten by 1/γ), time dilation (light clock runs slow), relativity of simultaneity; velocity slider β=v/c up to 0.99c; Lorentz‑transformed spacetime grid; neon glow; color modes; component toggles. Pushed to GitHub: https://github.com/Kiloooai/neon-relativity ← latest
@@ -271,7 +273,9 @@ Type 3 browser toys (public repos):
 122. neon-bell
 123. neon-relativity
 124. neon-perspective
-125. neon-diffraction ← latest
+125. neon-diffraction
+126. neon-interferometer ← latest
+
 
 
 
