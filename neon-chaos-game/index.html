@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Neon Chaos Game</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#050505;color:#ccc;font-family:'Segoe UI',Tahoma,sans-serif;overflow:hidden}
+canvas{display:block;width:100vw;height:100vh;filter:drop-shadow(0 0 10px rgba(0,255,255,0.4))}
+#ui{
+position:absolute;top:10px;left:10px;width:300px;
+background:rgba(10,10,20,0.85);border:1px solid #444;
+border-radius:6px;padding:12px;font-size:13px;
+box-shadow:0 0 10px rgba(0,255,255,0.15);
+}
+h2{margin:0 0 8px 0;font-size:16px;color:#0ff;text-shadow:0 0 8px #0ff}
+.row{display:flex;justify-content:space-between;margin:6px 0;align-items:center}
+label{color:#aaa}
+input[type=range]{width:180px;accent-color:#0ff}
+.val{color:#0f0;min-width:40px;text-align:right;font-family:monospace}
+button{
+width:100%;margin:4px 0;padding:8px;background:#111;color:#0ff;
+border:1px solid #0ff;border-radius:4px;cursor:pointer;font-size:13px;
+box-shadow:0 0 6px rgba(0,255,255,0.3);transition:all 0.2s
+}
+button:hover{background:#022;box-shadow:0 0 10px rgba(0,255,255,0.6)}
+#stats{
+position:absolute;top:10px;right:10px;
+background:rgba(10,10,20,0.85);border:1px solid #444;
+border-radius:6px;padding:10px 14px;font-size:12px;
+box-shadow:0 0 10px rgba(0,255,255,0.15);color:#0ff;
+}
+#hint{
+position:absolute;bottom:10px;left:0;right:0;text-align:center;
+font-size:12px;color:#666;pointer-events:none;
+}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="ui">
+<h2>Neon Chaos Game</h2>
+<div class="row"><label>Vertices</label><input id="verts" type="range" min="3" max="6" step="1" value="3"><span class="val" id="v-verts">3</span></div>
+<div class="row"><label>Ratio</label><input id="ratio" type="range" min="0.3" max="0.8" step="0.01" value="0.5"><span class="val" id="v-ratio">0.50</span></div>
+<div class="row"><label>Speed</label><input id="speed" type="range" min="1" max="20" step="1" value="5"><span class="val" id="v-speed">5</span></div>
+<div class="row"><label>Glow</label><input id="glow" type="range" min="0" max="50" value="15"><span class="val" id="v-glow">15</span></div>
+<div class="row"><label>Color mode</label><input id="colorMode" type="range" min="0" max="2" step="1" value="0"><span class="val" id="v-colorMode">0</span></div>
+<button id="randomVerts">Randomize vertices</button>
+<button id="reset">Reset</button>
+<button id="clear">Clear</button>
+<button id="pause">Pause</button>
+</div>
+<div id="stats">
+FPS: <span id="fps">0</span><br>
+Points: <span id="points">0</span><br>
+Attractor: <span id="attractor">Sierpinski</span>
+</div>
+<div id="hint">Chaos game — pick random vertex, move halfway; after many iterations fractal emerges; tweak ratio for different attractors</div>
+<script>
+(() => {
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+
+let W, H;
+const resize = () => { W=canvas.width=innerWidth; H=canvas.height=innerHeight; };
+resize();
+window.addEventListener('resize', resize);
+
+// Parameters
+const params = {
+verts: 3,       // number of polygon vertices
+ratio: 0.5,     // jump fraction (0.5 classic Sierpinski)
+speed: 5,       // points per frame
+glow: 15,
+colorMode: 0,
+paused: false
+};
+
+// Vertices array (normalized 0-1 then scaled)
+let V = [];
+function initVertices() {
+V = [];
+const n = params.verts;
+const radius = Math.min(W,H)*0.45;
+const cx = W/2, cy = H/2;
+for (let i=0; i<n; i++) {
+const angle = (i/n) * Math.PI*2 - Math.PI/2; // start at top
+V.push({
+x: cx + radius * Math.cos(angle),
+y: cy + radius * Math.sin(angle)
+});
+}
+}
+initVertices();
+
+// Current point
+let curr = { x: W/2, y: H/2 };
+let totalPoints = 0;
+
+// Binding
+const bind = (id, target, prop, transform=v=>v, fmt=v=>v) => {
+const el = document.getElementById(id);
+el.addEventListener('input', () => {
+let val = parseFloat(el.value);
+target[prop] = transform(val);
+document.getElementById('v-'+id).textContent = fmt(val);
+if (prop === 'verts') initVertices();
+});
+};
+bind('verts', params, 'verts', v=>Math.round(v), v=>v);
+bind('ratio', params, 'ratio', v=>v, v=>v.toFixed(2));
+bind('speed', params, 'speed', v=>Math.round(v), v=>v);
+bind('glow', params, 'glow', v=>v, v=>v);
+bind('colorMode', params, 'colorMode', v=>Math.round(v), v=>v);
+
+document.getElementById('randomVerts').onclick = () => {
+params.verts = Math.floor(Math.random()*4) + 3; // 3–6
+initVertices(); totalPoints=0; trace.length=0;
+updateInputs();
+};
+document.getElementById('reset').onclick = () => {
+params.verts=3; params.ratio=0.5; params.speed=5; params.glow=15; params.colorMode=0;
+initVertices(); totalPoints=0; trace.length=0; curr={x:W/2,y:H/2};
+updateInputs(); updateGlow();
+};
+document.getElementById('clear').onclick = () => { totalPoints=0; trace.length=0; ctx.fillStyle='#050505'; ctx.fillRect(0,0,W,H); };
+document.getElementById('pause').onclick = () => {
+params.paused = !params.paused;
+document.getElementById('pause').textContent = params.paused ? 'Resume' : 'Pause';
+};
+
+function updateInputs() {
+document.getElementById('verts').value=params.verts; document.getElementById('v-verts').textContent=params.verts;
+document.getElementById('ratio').value=params.ratio; document.getElementById('v-ratio').textContent=params.ratio.toFixed(2);
+document.getElementById('speed').value=params.speed; document.getElementById('v-speed').textContent=params.speed;
+document.getElementById('glow').value=params.glow; document.getElementById('v-glow').textContent=params.glow;
+document.getElementById('colorMode').value=params.colorMode; document.getElementById('v-colorMode').textContent=params.colorMode;
+}
+function updateGlow() {
+canvas.style.filter = `drop-shadow(0 0 ${params.glow}px rgba(0,255,255,0.6))`;
+}
+updateGlow();
+
+function transformColor(hex, mode, t) {
+if (mode === 0) return hex;
+let r = parseInt(hex.slice(1,3),16)/255, g = parseInt(hex.slice(3,5),16)/255, b = parseInt(hex.slice(5,7),16)/255;
+const rgbToHsl = (r,g,b) => {
+const max=Math.max(r,g,b), min=Math.min(r,g,b);
+let h,s,l=(max+min)/2;
+if(max===min){h=s=0;}else{
+const d=max-min;
+s = l>0.5 ? d/(2-max-min) : d/(max+min);
+switch(max){
+case r: h = (g-b)/d + (g<b?6:0); break;
+case g: h = (b-r)/d + 2; break;
+case b: h = (r-g)/d + 4; break;
+}
+h/=6;
+}
+return [h,s,l];
+};
+const hslToRgb = (h,s,l) => {
+let r,g,b;
+if(s===0){r=g=b=l;}else{
+const hue2rgb=(p,q,t)=>{if(t<0)t+=1;if(t>1)t-=1;if(t<1/6)return p+(q-p)*6*t;if(t<1/2)return q;if(t<2/3)return p+(q-p)*(2/3-t)*6;return p;};
+const q = l<0.5 ? l*(1+s) : l+s-l*s;
+const p = 2*l-q;
+r = hue2rgb(p,q,h+1/3); g = hue2rgb(p,q,h); b = hue2rgb(p,q,h-1/3);
+}
+return [r,g,b];
+};
+let [h,s,l] = rgbToHsl(r,g,b);
+if (mode === 1) h = (h + 0.3) % 1;
+else if (mode === 2) { s = Math.min(1, s*1.5); h = (h + 0.1*Math.sin(t*0.2)) % 1; }
+const [nr,ng,nb] = hslToRgb(h,s,l);
+return `rgb(${Math.floor(nr*255)},${Math.floor(ng*255)},${Math.floor(nb*255)})`;
+}
+
+// Stats
+const elFps = document.getElementById('fps');
+const elPoints = document.getElementById('points');
+const elAttractor = document.getElementById('attractor');
+
+let lastTime = performance.now();
+let frames=0, accum=0;
+let time=0;
+
+function loop(now) {
+const dt = (now - lastTime)/1000;
+lastTime = now; frames++; accum += dt;
+if (accum >= 0.5) {
+elFps.textContent = (frames/accum).toFixed(1);
+frames=0; accum=0;
+}
+if (!params.paused) time += dt;
+
+// Draw points
+ctx.shadowColor = '#0ff'; ctx.shadowBlur = params.glow;
+ctx.fillStyle = transformColor('#00ffff', params.colorMode, time);
+
+for (let i=0; i<params.speed; i++) {
+if (params.paused) break;
+// Pick random vertex
+const vi = Math.floor(Math.random() * V.length);
+const v = V[vi];
+// Move toward vertex by ratio
+curr.x = curr.x + (v.x - curr.x) * params.ratio;
+curr.y = curr.y + (v.y - curr.y) * params.ratio;
+ctx.fillRect(curr.x, curr.y, 1.5, 1.5);
+totalPoints++;
+}
+
+elPoints.textContent = totalPoints;
+
+// Identify attractor type for UI hint
+if (params.ratio === 0.5 && params.verts === 3) elAttractor.textContent = 'Sierpinski';
+else if (params.ratio === 0.5 && params.verts > 3) elAttractor.textContent = 'Sierpinski-like';
+else elAttractor.textContent = 'Chaos';
+
+requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
