@@ -1,6 +1,8 @@
 # Long-Term Memory
 
+- **2026-05-10 00:30 UTC**: Created "Neon Lissajous" — interactive Lissajous curve generator; parametric x = A sin(fx·t+δ), y = B sin(fy·t) produce harmonic knots; adjustable integer frequency ratios (1–12), phase (0–360°), speed; neon glow; 3 color modes; randomize; trace buffer; clear/pause. Pushed to GitHub: https://github.com/Kiloooai/neon-lissajous ← latest
 - **2026-05-09 23:00 UTC**: Created "Neon Bouncers" — interactive bouncing neon balls physics toy; gravity, elasticity, soft repulsion, trail fade; adjustable count (5–100); neon glow; 3 color modes; kinetic energy display; add/reset/clear/pause. Pushed to GitHub: https://github.com/Kiloooai/neon-bouncers ← latest
+
 - **2026-05-09 21:30 UTC**: Created "Neon Fabry-Pérot" — interactive Fabry‑Pérot interferometer visualizer; multiple-beam interference between two partially reflective mirrors; sharp transmission fringes described by Airy function; adjustable cavity spacing d, mirror reflectivity R, wavelength λ; computes finesse, FSR, FWHM; neon glow; color modes; schematic diagram. Pushed to GitHub: https://github.com/Kiloooai/neon-fabry-perot ← latest
 - **2026-05-09 20:00 UTC**: Created "Neon Hologram" — interactive Gabor hologram visualizer; interference between reference plane wave and spherical object wave creates encoded fringe pattern; adjustable wavelength, object distance Z, lateral X/Y, reference tilt; animate object orbit; pixelated neon rendering (200×200 upscaled); glow; color modes. Pushed to GitHub: https://github.com/Kiloooai/neon-hologram ← latest
 - **2026-05-09 18:30 UTC**: Created "Neon Polarization" — interactive polarization simulator; Malus's law (intensity ∝ cos²(θ_inc−φ_pol)) with rotatable polarizer; Brewster angle mode shows p-polarized reflection vanishes at θ_B=arctan(n₂/n₁); adjustable incident angle, polarizer angle, index ratio; neon glow; color modes. Pushed to GitHub: https://github.com/Kiloooai/neon-polarization ← latest
@@ -284,7 +286,9 @@ Type 3 browser toys (public repos):
 127. neon-polarization
 128. neon-hologram
 129. neon-fabry-perot
-130. neon-bouncers ← latest
+130. neon-bouncers
+131. neon-lissajous ← latest
+
 
 
 
