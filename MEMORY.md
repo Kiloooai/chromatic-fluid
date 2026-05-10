@@ -1,5 +1,6 @@
 # Long-Term Memory
 
+- **2026-05-10 03:30 UTC**: Created "Neon Fireworks Studio" — interactive firework simulator; launch explosions with glowing particles, gravity, fading trails; adjustable particle count (20–300), gravity, expansion speed, trail fade, glow; three color modes; auto-launch, clear, pause. Pushed to GitHub: https://github.com/Kiloooai/neon-fireworks-studio ← latest
 - **2026-05-10 02:00 UTC**: Created "Neon Chaos Game" — interactive chaos game fractal generator; random vertex selection with halfway jump produces Sierpinski gasket and variants; adjustable vertex count (3–6), jump ratio (0.3–0.8), speed, glow, color modes; randomize vertices, reset, clear, pause. Pushed to GitHub: https://github.com/Kiloooai/neon-chaos-game ← latest
 - **2026-05-10 00:30 UTC**: Created "Neon Lissajous" — interactive Lissajous curve generator; parametric x = A sin(fx·t+δ), y = B sin(fy·t) produce harmonic knots; adjustable integer frequency ratios (1–12), phase (0–360°), speed; neon glow; 3 color modes; randomize; trace buffer; clear/pause. Pushed to GitHub: https://github.com/Kiloooai/neon-lissajous ← latest
 
@@ -290,7 +291,9 @@ Type 3 browser toys (public repos):
 129. neon-fabry-perot
 130. neon-bouncers
 131. neon-lissajous
-132. neon-chaos-game ← latest
+132. neon-chaos-game
+133. neon-fireworks-studio ← latest
+
 
 
 
