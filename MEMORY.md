@@ -1,6 +1,8 @@
 # Long-Term Memory
 
+- **2026-05-10 02:00 UTC**: Created "Neon Chaos Game" — interactive chaos game fractal generator; random vertex selection with halfway jump produces Sierpinski gasket and variants; adjustable vertex count (3–6), jump ratio (0.3–0.8), speed, glow, color modes; randomize vertices, reset, clear, pause. Pushed to GitHub: https://github.com/Kiloooai/neon-chaos-game ← latest
 - **2026-05-10 00:30 UTC**: Created "Neon Lissajous" — interactive Lissajous curve generator; parametric x = A sin(fx·t+δ), y = B sin(fy·t) produce harmonic knots; adjustable integer frequency ratios (1–12), phase (0–360°), speed; neon glow; 3 color modes; randomize; trace buffer; clear/pause. Pushed to GitHub: https://github.com/Kiloooai/neon-lissajous ← latest
+
 - **2026-05-09 23:00 UTC**: Created "Neon Bouncers" — interactive bouncing neon balls physics toy; gravity, elasticity, soft repulsion, trail fade; adjustable count (5–100); neon glow; 3 color modes; kinetic energy display; add/reset/clear/pause. Pushed to GitHub: https://github.com/Kiloooai/neon-bouncers ← latest
 
 - **2026-05-09 21:30 UTC**: Created "Neon Fabry-Pérot" — interactive Fabry‑Pérot interferometer visualizer; multiple-beam interference between two partially reflective mirrors; sharp transmission fringes described by Airy function; adjustable cavity spacing d, mirror reflectivity R, wavelength λ; computes finesse, FSR, FWHM; neon glow; color modes; schematic diagram. Pushed to GitHub: https://github.com/Kiloooai/neon-fabry-perot ← latest
@@ -287,7 +289,9 @@ Type 3 browser toys (public repos):
 128. neon-hologram
 129. neon-fabry-perot
 130. neon-bouncers
-131. neon-lissajous ← latest
+131. neon-lissajous
+132. neon-chaos-game ← latest
+
 
 
 
